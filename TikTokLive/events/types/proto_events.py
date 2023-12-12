@@ -6,6 +6,7 @@
 from typing import Dict, Type, Union
 from TikTokLive.proto import *
 from ...events.event import BaseEvent
+from httpx import AsyncClient
 
 EVENT_MAPPINGS: Dict[str, str] = {
     "WebcastGiftMessage": "GiftEvent",
@@ -42,17 +43,11 @@ EVENT_MAPPINGS: Dict[str, str] = {
     "WebcastLinkLayerMessage": "LinkLayerEvent",
 }
 
-
 class GiftEvent(BaseEvent, WebcastGiftMessage):
     """
     GiftEvent
     """
 
-
-class RoomEvent(BaseEvent, WebcastRoomMessage):
-    """
-    RoomEvent
-    """
 
 
 class BarrageEvent(BaseEvent, WebcastBarrageMessage):
@@ -91,9 +86,24 @@ class EnvelopeEvent(BaseEvent, WebcastEnvelopeMessage):
     """
 
 
+class GiftEventE(BaseEvent, WebcastGiftMessage):
+    """
+    GiftEvent
+    """
+
+    def test(self):
+        pass
+
+
 class GoalUpdateEvent(BaseEvent, WebcastGoalUpdateMessage):
     """
     GoalUpdateEvent
+    """
+
+
+class HourlyRankEvent(BaseEvent, WebcastHourlyRankMessage):
+    """
+    HourlyRankEvent
     """
 
 
@@ -109,57 +119,15 @@ class LikeEvent(BaseEvent, WebcastLikeMessage):
     """
 
 
-class RoomUserSeqEvent(BaseEvent, WebcastRoomUserSeqMessage):
+class LinkEvent(BaseEvent, WebcastLinkMessage):
     """
-    RoomUserSeqEvent
-    """
-
-
-class SocialEvent(BaseEvent, WebcastSocialMessage):
-    """
-    SocialEvent
+    LinkEvent
     """
 
 
-class SubNotifyEvent(BaseEvent, WebcastSubNotifyMessage):
+class LinkLayerEvent(BaseEvent, WebcastLinkLayerMessage):
     """
-    SubNotifyEvent
-    """
-
-
-class RankUpdateEvent(BaseEvent, WebcastRankUpdateMessage):
-    """
-    RankUpdateEvent
-    """
-
-
-class MemberEvent(BaseEvent, WebcastMemberMessage):
-    """
-    MemberEvent
-    """
-
-
-class PollEvent(BaseEvent, WebcastPollMessage):
-    """
-    PollEvent
-    """
-
-
-class QuestionNewEvent(BaseEvent, WebcastQuestionNewMessage):
-    """
-    QuestionNewEvent
-    """
-
-
-class RankTextEvent(BaseEvent, WebcastRankTextMessage):
-    """
-    RankTextEvent
-    """
-
-
-class HourlyRankEvent(BaseEvent, WebcastHourlyRankMessage):
-    """
-    HourlyRankEvent
+    LinkLayerEvent
     """
 
 
@@ -193,9 +161,9 @@ class LiveIntroEvent(BaseEvent, WebcastLiveIntroMessage):
     """
 
 
-class UnauthorizedMemberEvent(BaseEvent, WebcastUnauthorizedMemberMessage):
+class MemberEvent(BaseEvent, WebcastMemberMessage):
     """
-    UnauthorizedMemberEvent
+    MemberEvent
     """
 
 
@@ -211,9 +179,57 @@ class OecLiveShoppingEvent(BaseEvent, WebcastOecLiveShoppingMessage):
     """
 
 
+class PollEvent(BaseEvent, WebcastPollMessage):
+    """
+    PollEvent
+    """
+
+
+class QuestionNewEvent(BaseEvent, WebcastQuestionNewMessage):
+    """
+    QuestionNewEvent
+    """
+
+
+class RankTextEvent(BaseEvent, WebcastRankTextMessage):
+    """
+    RankTextEvent
+    """
+
+
+class RankUpdateEvent(BaseEvent, WebcastRankUpdateMessage):
+    """
+    RankUpdateEvent
+    """
+
+
+class RoomEvent(BaseEvent, WebcastRoomMessage):
+    """
+    RoomEvent
+    """
+
+
 class RoomPinEvent(BaseEvent, WebcastRoomPinMessage):
     """
     RoomPinEvent
+    """
+
+
+class RoomUserSeqEvent(BaseEvent, WebcastRoomUserSeqMessage):
+    """
+    RoomUserSeqEvent
+    """
+
+
+class SocialEvent(BaseEvent, WebcastSocialMessage):
+    """
+    SocialEvent
+    """
+
+
+class SubNotifyEvent(BaseEvent, WebcastSubNotifyMessage):
+    """
+    SubNotifyEvent
     """
 
 
@@ -223,15 +239,9 @@ class SystemEvent(BaseEvent, WebcastSystemMessage):
     """
 
 
-class LinkEvent(BaseEvent, WebcastLinkMessage):
+class UnauthorizedMemberEvent(BaseEvent, WebcastUnauthorizedMemberMessage):
     """
-    LinkEvent
-    """
-
-
-class LinkLayerEvent(BaseEvent, WebcastLinkLayerMessage):
-    """
-    LinkLayerEvent
+    UnauthorizedMemberEvent
     """
 
 

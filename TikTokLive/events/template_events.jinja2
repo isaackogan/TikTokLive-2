@@ -3,34 +3,46 @@
 # SERIOUSLY!
 # I MEAN IT!
 
-from typing import Dict, Type, Union
-from {{ proto_pkg }} import *
-from {{ event_pkg }} import BaseEvent
+{# Module Imports #}
+{% for i in imports %}
+{{ i }}
+{% endfor %}
 
+{# Event Mappings #}
 EVENT_MAPPINGS: Dict[str, str] = {
     {% for i in events %}
-    "{{ i.subclass_name }}": "{{ i.event_name }}",
+    "{{ i.proto_name }}": "{{ i.class_name }}",
     {% endfor %}
 }
 
-
+{# New Events #}
 {% for i in events %}
-class {{ i.event_name }}(BaseEvent, {{ i.subclass_name }}):
+{% if i.write_class %}
+class {{ i.class_name }}(BaseEvent, {{ i.proto_name }}):
     """
-    {{ i.event_name }}
+    {{ i.class_name }}
     """
 
+
+{% endif %}
+{% endfor %}
+
+{# Existing Events/Classes #}
+{% for c in classes %}
+{{ c[1] }}
 
 {% endfor %}
+{# Types #}
 ProtoEvent: Type = Union[
     {% for i in events %}
-    {{ i.subclass_name }},
+    {{ i.proto_name }},
     {% endfor %}
 ]
 
+{# Exported Classes #}
 __all__ = [
     {% for i in events %}
-    "{{ i.event_name }}",
+    "{{ i.class_name }}",
     {% endfor %}
     "EVENT_MAPPINGS",
     "ProtoEvent"
