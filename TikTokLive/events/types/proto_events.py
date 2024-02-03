@@ -6,46 +6,11 @@
 from typing import Dict, Type, Union
 from TikTokLive.proto import *
 from ...events.event import BaseEvent
-from httpx import AsyncClient
+from typing import Type, Union
 
-EVENT_MAPPINGS: Dict[str, str] = {
-    "WebcastGiftMessage": "GiftEvent",
-    "WebcastRoomMessage": "RoomEvent",
-    "WebcastBarrageMessage": "BarrageEvent",
-    "WebcastCaptionMessage": "CaptionEvent",
-    "WebcastChatMessage": "ChatEvent",
-    "WebcastControlMessage": "ControlEvent",
-    "WebcastEmoteChatMessage": "EmoteChatEvent",
-    "WebcastEnvelopeMessage": "EnvelopeEvent",
-    "WebcastGoalUpdateMessage": "GoalUpdateEvent",
-    "WebcastImDeleteMessage": "ImDeleteEvent",
-    "WebcastLikeMessage": "LikeEvent",
-    "WebcastRoomUserSeqMessage": "RoomUserSeqEvent",
-    "WebcastSocialMessage": "SocialEvent",
-    "WebcastSubNotifyMessage": "SubNotifyEvent",
-    "WebcastRankUpdateMessage": "RankUpdateEvent",
-    "WebcastMemberMessage": "MemberEvent",
-    "WebcastPollMessage": "PollEvent",
-    "WebcastQuestionNewMessage": "QuestionNewEvent",
-    "WebcastRankTextMessage": "RankTextEvent",
-    "WebcastHourlyRankMessage": "HourlyRankEvent",
-    "WebcastLinkMicArmies": "LinkMicArmies",
-    "WebcastLinkMicBattle": "LinkMicBattle",
-    "WebcastLinkMicFanTicketMethod": "LinkMicFanTicketMethod",
-    "WebcastLinkMicMethod": "LinkMicMethod",
-    "WebcastLiveIntroMessage": "LiveIntroEvent",
-    "WebcastUnauthorizedMemberMessage": "UnauthorizedMemberEvent",
-    "WebcastMsgDetectMessage": "MessageDetectEvent",
-    "WebcastOecLiveShoppingMessage": "OecLiveShoppingEvent",
-    "WebcastRoomPinMessage": "RoomPinEvent",
-    "WebcastSystemMessage": "SystemEvent",
-    "WebcastLinkMessage": "LinkEvent",
-    "WebcastLinkLayerMessage": "LinkLayerEvent",
-}
-
-class GiftEvent(BaseEvent, WebcastGiftMessage):
+class CommentEvent(BaseEvent, WebcastChatMessage):
     """
-    GiftEvent
+    CommentEvent
     """
 
 
@@ -59,12 +24,6 @@ class BarrageEvent(BaseEvent, WebcastBarrageMessage):
 class CaptionEvent(BaseEvent, WebcastCaptionMessage):
     """
     CaptionEvent
-    """
-
-
-class ChatEvent(BaseEvent, WebcastChatMessage):
-    """
-    ChatEvent
     """
 
 
@@ -86,13 +45,10 @@ class EnvelopeEvent(BaseEvent, WebcastEnvelopeMessage):
     """
 
 
-class GiftEventE(BaseEvent, WebcastGiftMessage):
+class GiftEvent(BaseEvent, WebcastGiftMessage):
     """
     GiftEvent
     """
-
-    def test(self):
-        pass
 
 
 class GoalUpdateEvent(BaseEvent, WebcastGoalUpdateMessage):
@@ -245,6 +201,41 @@ class UnauthorizedMemberEvent(BaseEvent, WebcastUnauthorizedMemberMessage):
     """
 
 
+EVENT_MAPPINGS: Dict[str, BaseEvent] = {
+    "WebcastGiftMessage": GiftEvent,
+    "WebcastRoomMessage": RoomEvent,
+    "WebcastBarrageMessage": BarrageEvent,
+    "WebcastCaptionMessage": CaptionEvent,
+    "WebcastChatMessage": CommentEvent,
+    "WebcastControlMessage": ControlEvent,
+    "WebcastEmoteChatMessage": EmoteChatEvent,
+    "WebcastEnvelopeMessage": EnvelopeEvent,
+    "WebcastGoalUpdateMessage": GoalUpdateEvent,
+    "WebcastImDeleteMessage": ImDeleteEvent,
+    "WebcastLikeMessage": LikeEvent,
+    "WebcastRoomUserSeqMessage": RoomUserSeqEvent,
+    "WebcastSocialMessage": SocialEvent,
+    "WebcastSubNotifyMessage": SubNotifyEvent,
+    "WebcastRankUpdateMessage": RankUpdateEvent,
+    "WebcastMemberMessage": MemberEvent,
+    "WebcastPollMessage": PollEvent,
+    "WebcastQuestionNewMessage": QuestionNewEvent,
+    "WebcastRankTextMessage": RankTextEvent,
+    "WebcastHourlyRankMessage": HourlyRankEvent,
+    "WebcastLinkMicArmies": LinkMicArmies,
+    "WebcastLinkMicBattle": LinkMicBattle,
+    "WebcastLinkMicFanTicketMethod": LinkMicFanTicketMethod,
+    "WebcastLinkMicMethod": LinkMicMethod,
+    "WebcastLiveIntroMessage": LiveIntroEvent,
+    "WebcastUnauthorizedMemberMessage": UnauthorizedMemberEvent,
+    "WebcastMsgDetectMessage": MessageDetectEvent,
+    "WebcastOecLiveShoppingMessage": OecLiveShoppingEvent,
+    "WebcastRoomPinMessage": RoomPinEvent,
+    "WebcastSystemMessage": SystemEvent,
+    "WebcastLinkMessage": LinkEvent,
+    "WebcastLinkLayerMessage": LinkLayerEvent,
+}
+
 ProtoEvent: Type = Union[
     WebcastGiftMessage,
     WebcastRoomMessage,
@@ -285,7 +276,7 @@ __all__ = [
     "RoomEvent",
     "BarrageEvent",
     "CaptionEvent",
-    "ChatEvent",
+    "CommentEvent",
     "ControlEvent",
     "EmoteChatEvent",
     "EnvelopeEvent",

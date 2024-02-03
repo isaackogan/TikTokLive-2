@@ -1,8 +1,8 @@
 syntax = "proto3";
 
+import "custom.proto";
 import "data.proto";
 import "enums.proto";
-
 
 //@WebcastPushFrame
 // Response from TikTokServer. Container for Messages
@@ -11,17 +11,13 @@ message WebcastPushFrame {
   uint64 LogId = 2;
   uint64 Service = 3;
   uint64 Method = 4;
-  map<string,string> headers = 5;
+  map<string, string> headers = 5;
   string PayloadEncoding = 6;
   string PayloadType = 7;
   bytes Payload = 8;
 
 }
 
-message WebcastWebsocketAck {
-  uint64 Id = 1;
-  string Type = 2;
-}
 
 
 //@WebcastResponse
@@ -74,6 +70,13 @@ message WebcastGiftMessage {
   bool isFirstSent = 25;
   string orderId = 28;
   UserIdentity userIdentity = 32;
+  UserGiftReciever userGiftReciever = 23;
+
+  message UserGiftReciever
+  {
+    int64 userId = 1;
+    string deviceName = 10;
+  }
 
   message GiftIMPriority {
     repeated int64 queueSizesList = 1;
@@ -170,6 +173,8 @@ message WebcastCaptionMessage {
   }
 }
 
+
+
 // Comment sent by User
 //@WebcastChatMessage
 message WebcastChatMessage {
@@ -188,7 +193,7 @@ message WebcastChatMessage {
   int32 quickChatScene = 16;
   int32 communityFlaggedStatus = 17;
   UserIdentity UserIdentity = 18;
-  map<int32,string> CommentQualityScores = 19;
+  map<string, string> CommentQualityScores = 19;
 
   // @EmoteWithIndex
   // proto.webcast.im.ChatMessage
@@ -239,13 +244,13 @@ message WebcastEmoteChatMessage {
 message WebcastEnvelopeMessage {
   Common common = 1;
   EnvelopeInfo envelopeInfo = 2;
-  int64 display = 3; // @warning Enum not found, should be Display
+  EnvelopeDisplay display = 3; // @warning Enum not found, should be Display
 
   // @EnvelopeInfo
   // proto.webcast.im.EnvelopeMessage
   message EnvelopeInfo {
     string envelopeId = 1;
-    int64 businessType = 2; // @warning Enum not found, should be BusinessType
+    EnvelopeBusinessType businessType = 2;
     string envelopeIdc = 3;
     string sendUserName = 4;
     int32 diamondCount = 5;
@@ -255,7 +260,7 @@ message WebcastEnvelopeMessage {
     Image sendUserAvatar = 9;
     string createAt = 10;
     string roomId = 11;
-    int64 followShowStatus = 12; // @warning Enum not found, should be FollowShowStatus
+    EnvelopeFollowShowStatus followShowStatus = 12; // @warning Enum not found, should be FollowShowStatus
     int32 skinId = 13;
   }
 }
@@ -268,14 +273,14 @@ message WebcastGoalUpdateMessage {
   int64 contributorId = 4;
   Image contributorAvatar = 5;
   string contributorDisplayId = 6;
-//  SubGoal contributeSubgoal = 7;
+  //  SubGoal contributeSubgoal = 7;
   int64 contributeCount = 9;
   int64 contributeScore = 10;
   int64 giftRepeatCount = 11;
   string contributorIdStr = 12;
   bool pin = 13;
   bool unpin = 14;
- // GoalPinInfo pinInfo = 15;
+  // GoalPinInfo pinInfo = 15;
 }
 
 // Message related to Chat-moderation?
@@ -339,7 +344,7 @@ message WebcastSocialMessage {
 message WebcastSubNotifyMessage {
   Common common = 1;
   User user = 2;
-//  ExhibitionType exhibitionType = 3; // Enum
+  //  ExhibitionType exhibitionType = 3; // Enum
   int64 subMonth = 4;
   SubscribeType subscribeType = 5; // Enum
   OldSubscribeStatus oldSubscribeStatus = 6; // Enum
@@ -411,6 +416,7 @@ message WebcastMemberMessage {
 
   // @EffectConfig
   // proto.webcast.im.MemberMessage
+  // C:\Users\ja\RiderProjects\TikTokProBufferGenerator\Application\output\sources\test.js
   message EffectConfig {
     int64 type = 1;
     Image icon = 2;
@@ -432,7 +438,7 @@ message WebcastMemberMessage {
 //@WebcastPollMessage
 message WebcastPollMessage {
   Common common = 1;
-  int32 messageType = 2;
+  MessageType messageType = 2;
   int64 pollId = 3;
   PollStartContent startContent = 4;
   PollEndContent endContent = 5;
@@ -497,6 +503,9 @@ message WebcastHourlyRankMessage {
   }
 }
 
+
+//<Battles>
+
 //@WebcastLinkMicArmies
 message WebcastLinkMicArmies {
   Common common = 1;
@@ -512,6 +521,45 @@ message WebcastLinkMicArmies {
   Image Image = 11;
   uint32 data4 = 12;
   uint32 data5 = 13;
+}
+//@WebcastLinkMicBattlePunishFinish
+message WebcastLinkMicBattlePunishFinish {
+  Common Header = 1;
+  uint64 Id1 = 2;
+  uint64 Timestamp = 3;
+  uint32 Data4 = 4;
+  uint64 Id2 = 5;
+  LinkMicBattlePunishFinishData Data6 = 6;
+
+  message LinkMicBattlePunishFinishData {
+    uint64 Id2 = 1; // Same as Id2 in outer object (loser?)
+    uint64 Timestamp = 2;
+    uint32 Data3 = 3;
+    uint64 Id1 = 4; // Same as Id1 in outer object (winner?)
+    uint32 Data5 = 5;
+    uint32 Data6 = 6;
+    uint32 Data8 = 8;
+  }
+}
+
+//@WebcastLinkmicBattleTaskMessage
+message WebcastLinkmicBattleTaskMessage {
+  Common Header = 1;
+  uint32 Data2 = 2;
+  LinkmicBattleTaskData Data3 = 3;
+  LinkmicBattleTaskData2 Data5 = 5;
+
+  message LinkmicBattleTaskData {
+    BattleTaskData Data1 = 1;
+  }
+  message BattleTaskData {
+    uint32 Data1 = 1;
+  }
+
+  message LinkmicBattleTaskData2 {
+    uint32 Data1 = 1;
+    uint32 Data2 = 2;
+  }
 }
 
 //@WebcastLinkMicBattle
@@ -562,11 +610,10 @@ message WebcastLinkMicFanTicketMethod {
   Common common = 1;
   FanTicketRoomNoticeContent FanTicketRoomNotice = 2;
 }
-
 //@WebcastLinkMicMethod
 message WebcastLinkMicMethod {
   Common common = 1;
-  int64 messageType = 2;
+  MessageType messageType = 2;
   string accessKey = 3;
   int64 anchorLinkmicId = 4;
   int64 userId = 5;
@@ -579,6 +626,8 @@ message WebcastLinkMicMethod {
   string theme = 12;
   int64 inviteUid = 13;
 }
+
+//<Battles>
 
 //@WebcastLiveIntroMessage
 message WebcastLiveIntroMessage {
@@ -622,7 +671,7 @@ message WebcastMsgDetectMessage {
     bool detectP2PMsg = 3;
     bool detectRoomMsg = 4;
     bool httpOptimize = 5;
-}
+  }
 }
 
 //@WebcastOecLiveShoppingMessage
@@ -673,39 +722,63 @@ message WebcastSystemMessage {
 //@WebcastLinkMessage
 message WebcastLinkMessage {
   Common common = 1;
-  uint32 data1 = 2;
-  uint64 data2 = 3;
-  uint32 data3 = 4;
-  LinkMessageData data = 18;
-  LinkMessageUserContainer user = 20;
-  string token = 200;
-
-  message LinkMessageData {
-    DataContainer data = 1; // index 1 is an Id
-  }
-
-  message LinkMessageUserContainer {
-    LinkMessageUser user = 1;
-    repeated LinkMessageUser otherUsers = 2;
-
-    message LinkMessageUser {
-      User user = 1;
-      uint64 timeStamp = 2;
-      uint32 data1 = 4;
-      string idString = 5;
-      uint32 data2 = 7;
-    }
-  }
+  LinkMessageType MessageType = 2;
+  int64 LinkerId = 3;
+  Scene Scene = 4;
+  LinkerInviteContent InviteContent = 5;
+  LinkerReplyContent ReplyContent = 6;
+  LinkerCreateContent CreateContent = 7;
+  LinkerCloseContent CloseContent = 8;
+  LinkerEnterContent EnterContent = 9;
+  LinkerLeaveContent LeaveContent = 10;
+  LinkerCancelContent CancelContent = 11;
+  LinkerKickOutContent KickOutContent = 12;
+  LinkerLinkedListChangeContent LinkedListChangeContent = 13;
+  LinkerUpdateUserContent UpdateUserContent = 14;
+  LinkerWaitingListChangeContent WaitingListChangeContent = 15;
+  LinkerMuteContent MuteContent = 16;
+  LinkerRandomMatchContent RandomMatchContent = 17;
+  LinkerUpdateUserSettingContent UpdateUserSettingContent = 18;
+  LinkerMicIdxUpdateContent MicIdxUpdateContent = 19;
+  LinkerListChangeContent ListChangeContent = 20;
+  CohostListChangeContent CohostListChangeContent = 21;
+  LinkerMediaChangeContent MediaChangeContent = 22;
+  LinkerAcceptNoticeContent ReplyAcceptNoticeContent = 23;
+  LinkerSysKickOutContent SysKickOutContent = 101;
+  LinkmicUserToastContent UserToastContent = 102;
+  string extra = 200;
+  int64 expireTimestamp = 201;
+  string transferExtra = 202;
 }
 
-//@WebcastLinkLayerMessage
+
+// @WebcastLinkLayerMessage
 message WebcastLinkLayerMessage {
   Common common = 1;
-  LinkLayerMessageType messageType = 2;
+  MessageType messageType = 2; // Enum
   int64 channelId = 3;
+  Scene scene = 4; // Enum
+  CreateChannelContent createChannelContent = 100;
+  ListChangeContent listChangeContent = 102;
+  InviteContent inviteContent = 103;
+  ApplyContent applyContent = 104;
+  PermitApplyContent permitApplyContent = 105;
+  ReplyInviteContent replyInviteContent = 106;
+  KickOutContent kickOutContent = 107;
+  CancelApplyContent cancelApplyContent = 108;
+  CancelInviteContent cancelInviteContent = 109;
+  LeaveContent leaveContent = 110;
+  FinishChannelContent finishContent = 111;
+  JoinDirectContent joinDirectContent = 112;
+  JoinGroupContent joinGroupContent = 113;
+  PermitJoinGroupContent permitGroupContent = 114;
+  CancelJoinGroupContent cancelGroupContent = 115;
+  LeaveJoinGroupContent leaveGroupContent = 116;
+  P2PGroupChangeContent p2pGroupChangeContent = 117;
+  BusinessContent businessContent = 200;
 }
 
-
+// @RoomVerifyMessage
 message RoomVerifyMessage {
   Common common = 1;
   int32 action = 2;
@@ -713,4 +786,5 @@ message RoomVerifyMessage {
   int64 noticeType = 4;
   bool closeRoom = 5;
 }
+
 

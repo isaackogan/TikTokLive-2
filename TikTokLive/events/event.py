@@ -1,5 +1,9 @@
 class BaseEvent:
 
     @property
-    def event_type(self) -> str:
-        return type(self).__name__
+    def type(self) -> str:
+        return self.get_type()
+
+    @classmethod
+    def get_type(cls) -> str:
+        return cls.__name__

@@ -8,7 +8,8 @@ import betterproto
 from TikTokLive.proto import Common
 
 MESSAGE_OVERRIDES: Dict[str, str] = {
-    "WebcastMsgDetectMessage": "MessageDetectEvent"
+    "WebcastMsgDetectMessage": "MessageDetectEvent",
+    "WebcastChatMessage": "CommentEvent"
 }
 
 BASE_IMPORTS: List[str] = [
@@ -169,8 +170,6 @@ class PreviousMod:
             imports.append(line)
 
         return imports
-
-
 
 
 if __name__ == '__main__':

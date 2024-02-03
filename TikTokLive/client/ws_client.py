@@ -1,4 +1,5 @@
 import asyncio
+import functools
 import signal
 from asyncio import AbstractEventLoop
 from typing import Optional, AsyncIterator
@@ -6,24 +7,28 @@ from typing import Optional, AsyncIterator
 import websockets as websockets
 from websockets import WebSocketClientProtocol
 
-from TikTokLive.proto import WebcastWebsocketAck, WebcastPushFrame
+from TikTokLive.proto import WebcastPushFrame, WebcastResponse
 
 
-class WebsocketClient:
+class WebcastWSClient:
 
-    def __init__(self):
+    DEFAULT_KWARGS: dict = {
+        "subprotocols": ["echo-rptocol"],
+        "ping_timeout": 10.0,
+        "ping_interval": 10.0
+    }
+
+    def __init__(self, loop: AbstractEventLoop, ws_kwargs: dict = {}):
+        self._ws_kwargs: dict = ws_kwargs
         self._connected: bool = False
         self._websocket: Optional[WebSocketClientProtocol] = None
-        self._loop: AbstractEventLoop = asyncio.get_running_loop()
-
-    @property
-    def ws_kwargs(self) -> dict:
-        return {}
+        self._loop: AbstractEventLoop = loop
+        self._should_cancel: bool = False
 
     async def send_ack(self, message_id: int) -> None:
 
         # Can't ack a dead websocket...
-        if not self._websocket or not self._websocket.open:
+        if not self.connected:
             return
 
         message: WebcastWebsocketAck = WebcastWebsocketAck(
@@ -33,7 +38,18 @@ class WebsocketClient:
 
         await self._websocket.send(bytes(message))
 
-    async def connect_ws(self) -> AsyncIterator[WebcastPushFrame]:
+    @property
+    def connected(self) -> bool:
+        return self._websocket and self._websocket.open
+
+    def cancel(self):
+        self._should_cancel = True
+
+    async def connect_ws(
+            self,
+            uri: str,
+            headers: dict
+    ) -> AsyncIterator[WebcastPushFrame]:
         """
 
         The iterator exits normally when the connection is closed with close code
@@ -43,12 +59,22 @@ class WebsocketClient:
         TODO handle this TODO
         """
 
-        async for websocket in websockets.connect(**self.ws_kwargs):
+        async for websocket in websockets.connect(
+            uri=self._ws_kwargs.pop("uri", uri),
+            extra_headers={**headers, **self._ws_kwargs.pop("headers", {})},
+            **self._ws_kwargs
+        ):
+
+            if self._should_cancel:
+                return
 
             try:
 
                 # Graceful closing
-                self._loop.add_signal_handler(signal.SIGTERM, self._loop.create_task, websocket.close())
+                self._loop.add_signal_handler(
+                    signal.SIGTERM,
+                    lambda: asyncio.create_task(websocket.close())
+                )
 
                 # Each time we receive a message, yield it
                 async for message in websocket:

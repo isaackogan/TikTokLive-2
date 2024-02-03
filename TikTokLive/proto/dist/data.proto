@@ -1,8 +1,6 @@
 syntax = "proto3";
-
 import "enums.proto";
 
-// @Common
 message Common {
   string method = 1;
   int64 msgId = 2;
@@ -29,7 +27,6 @@ message Common {
   int64 foldTypeForWeb = 23;
   int64 anchorFoldTypeForWeb = 24;
   int64 clientSendTime = 25;
-  IMDispatchStrategy dispatchStrategy = 26; // Enum
 
   message LiveMessageSEI {
     LiveMessageID uniqueId = 1;
@@ -47,7 +44,6 @@ message Common {
   }
 }
 
-// @Text
 message Text {
   string key = 1;
   string defaultPattern = 2;
@@ -60,8 +56,8 @@ message Text {
     string stringValue = 11;
     oneof textPieceType
     {
-        TextPieceUser userValue = 21;
-        TextPieceGift giftValue = 22;
+      TextPieceUser userValue = 21;
+      TextPieceGift giftValue = 22;
     }
     TextPiecePatternRef patternRefValue = 24;
   }
@@ -79,8 +75,6 @@ message Text {
 
   message TextPieceGift {
     int32 giftId = 1;
-    // PatternRef nameRef = 2;
-    // ShowType showType = 3; // Enum
     int64 colorId = 4;
   }
 
@@ -96,15 +90,12 @@ message Text {
 
 }
 
-// @Image
 message Image {
   repeated string urlList = 1;
   bool isAnimated = 9;
 }
 
-// @Badge
 message BadgeStruct {
-  BadgeDisplayType displayType = 1; // Enum
   oneof badgeType
   {
     ImageBadge image = 20;
@@ -117,8 +108,6 @@ message BadgeStruct {
     Image icon = 2;
     TextBadge text = 3;
     string str = 4;
-    // repeated PaddingInfo padding = 5;
-    // FontStyle fontStyle = 6;
     ProfileCardPanel profileCardPanel = 7;
     CombineBadgeBackground background = 11;
     CombineBadgeBackground backgroundDarkMode = 12;
@@ -128,7 +117,6 @@ message BadgeStruct {
     int32 personalCardShowStyle = 16;
     int32 ranklistOnlineAudienceShowStyle = 17;
     int32 multiGuestShowStyle = 18;
-    //  repeated PaddingInfo paddingNewFont = 20;
   }
 
   message ProfileContent {
@@ -144,14 +132,12 @@ message BadgeStruct {
 
   message NumberConfig {
     int64 number = 1;
-    //FontStyle fontStyle = 2;
     CombineBadgeBackground background = 3;
   }
 
 
   message ProfileCardPanel {
     bool useNewProfileCardStyle = 1;
-  //  BadgeTextPosition badgeTextPosition = 2; // Enum
     ProjectionConfig projectionConfig = 3;
     ProfileContent profileContent = 4;
   }
@@ -208,7 +194,6 @@ message BadgeStruct {
 
 }
 
-// @Gift
 message GiftStruct {
   Image image = 1;
   string describe = 2;
@@ -231,11 +216,8 @@ message GiftStruct {
   bool isRandomGift = 51;
   bool isBoxGift = 52;
   bool canPutInGiftBox = 53;
-  // GiftBoxInfo giftBoxInfo = 54;
 
 
-  // @GiftPanelBanner
-  // proto.webcast.data.GiftStruct
   message GiftPanelBanner {
     Text displayText = 1;
     Image leftIcon = 2;
@@ -245,8 +227,6 @@ message GiftStruct {
   }
 
 
-  // @GiftRandomEffectInfo
-  // proto.webcast.data.GiftStruct
   message GiftRandomEffectInfo {
     RandomGiftPanelBanner randomGiftPanelBanner = 1;
     repeated int64 effectIdsList = 2;
@@ -256,16 +236,12 @@ message GiftStruct {
   }
 
 
-  // @RandomGiftBubble
-  // proto.webcast.data.GiftStruct
   message RandomGiftBubble {
     string displayText = 1;
     Image iconDynamicEffect = 2;
   }
 
 
-  // @RandomGiftPanelBanner
-  // proto.webcast.data.GiftStruct
   message RandomGiftPanelBanner {
     Image bgImage = 1;
     Image shadingImage = 2;
@@ -280,7 +256,6 @@ message GiftStruct {
 
 }
 
-// @User
 message User {
   int64 id = 1;
   string nickname = 3;
@@ -382,11 +357,8 @@ message User {
     bool hasSubscribed = 6;
     bool isPaidEvent = 7;
     int64 ticketAmount = 8;
-    int64 payMethod = 9; // @warning Enum not found, should be PayMethod
 
 
-    // @EventPayMethod
-    // webcast.data.LiveEventInfo
     enum EventPayMethod {
       EVENTPAYMETHODINVALID = 0;
       EVENTPAYMETHODCOINS = 1;
@@ -394,8 +366,6 @@ message User {
     }
 
 
-    // @WalletPackage
-    // proto.webcast.data.LiveEventInfo
     message WalletPackage {
       string iapId = 1;
       string usdPriceShow = 2;
@@ -404,8 +374,6 @@ message User {
   }
 
 
-  // @ActivityInfo
-  // proto.webcast.data.User
   message ActivityInfo {
     Image badge = 1;
     Image storytag = 2;
@@ -413,8 +381,6 @@ message User {
 
 
 
-  // @AnchorLevel
-  // proto.webcast.data.User
   message AnchorLevel {
     int64 level = 1;
     int64 experience = 2;
@@ -432,8 +398,6 @@ message User {
   }
 
 
-  // @AuthenticationInfo
-  // proto.webcast.data.User
   message AuthenticationInfo {
     string customVerify = 1;
     string enterpriseVerifyReason = 2;
@@ -441,8 +405,6 @@ message User {
   }
 
 
-  // @AuthorStats
-  // proto.webcast.data.User
   message AuthorStats {
     int64 videoTotalCount = 1;
     int64 videoTotalPlayCount = 2;
@@ -453,8 +415,6 @@ message User {
   }
 
 
-  // @Border
-  // proto.webcast.data.User
   message Border {
     Image icon = 1;
     int64 level = 2;
@@ -465,26 +425,18 @@ message User {
   }
 
 
-  // @ComboBadgeInfo
-  // proto.webcast.data.User
   message ComboBadgeInfo {
     Image icon = 1;
     int64 comboCount = 2;
   }
 
 
-  // @EcommerceEntrance
-  // proto.webcast.data.User
   message EcommerceEntrance {
-    EntranceType entranceType = 1; // Enum
-    CreatorType creatorType = 2; // Enum
     string schema = 3;
     ShopEntranceInfo shopEntranceInfo = 4;
     ShowcaseEntranceInfo showcaseEntranceInfo = 5;
 
 
-    // @CreatorType
-    // webcast.data.User.EcommerceEntrance
     enum CreatorType {
       UNDEFINED = 0;
       OFFICIAL = 1;
@@ -493,8 +445,6 @@ message User {
     }
 
 
-    // @EntranceType
-    // webcast.data.User.EcommerceEntrance
     enum EntranceType {
       PROFILE = 0;
       SHOWCASE = 1;
@@ -502,8 +452,6 @@ message User {
     }
 
 
-    // @ShopEntranceInfo
-    // proto.webcast.data.User.EcommerceEntrance
     message ShopEntranceInfo {
       string shopId = 1;
       string shopName = 2;
@@ -517,15 +465,11 @@ message User {
       bool showRateNotApplicable = 10;
 
 
-      // @StoreLabel
-      // proto.webcast.data.User.EcommerceEntrance.ShopEntranceInfo
       message StoreLabel {
         StoreOfficialLabel officialLabel = 1;
         bool isBytemall = 2;
 
 
-        // @StoreBrandLabelType
-        // webcast.data.User.EcommerceEntrance.ShopEntranceInfo.StoreLabel
         enum StoreBrandLabelType {
           NONE = 0;
           OFFICIAL = 1;
@@ -535,17 +479,12 @@ message User {
         }
 
 
-        // @StoreOfficialLabel
-        // proto.webcast.data.User.EcommerceEntrance.ShopEntranceInfo.StoreLabel
         message StoreOfficialLabel {
           ShopLabelImage labelImageLight = 1;
           ShopLabelImage labelImageDark = 2;
-          int64 labelType = 3; // @warning Enum not found, should be LabelType
           string labelTypeStr = 4;
 
 
-          // @ShopLabelImage
-          // proto.webcast.data.User.EcommerceEntrance.ShopEntranceInfo.StoreLabel.StoreOfficialLabel
           message ShopLabelImage {
             int32 height = 1;
             int32 width = 2;
@@ -564,8 +503,6 @@ message User {
     }
 
 
-    // @ShowcaseEntranceInfo
-    // proto.webcast.data.User.EcommerceEntrance
     message ShowcaseEntranceInfo {
       string formatSoldCount = 1;
       int64 soldCount = 2;
@@ -574,24 +511,17 @@ message User {
   }
 
 
-  // @FansClub
-  // proto.webcast.data.User
   message FansClub {
     FansClubData data = 1;
 
 
-    // @FansClubData
-    // proto.webcast.data.User.FansClub
     message FansClubData {
       string clubName = 1;
       int32 level = 2;
-      UserFansClubStatus userFansClubStatus = 3; // Enum
       repeated int64 availableGiftIdsList = 5;
       int64 anchorId = 6;
 
 
-      // @BadgeIcon
-      // webcast.data.User.FansClub.FansClubData
       enum BadgeIcon {
         UNKNOWN = 0;
         ICON = 1;
@@ -599,8 +529,6 @@ message User {
       }
 
 
-      // @UserFansClubStatus
-      // webcast.data.User.FansClub.FansClubData
       enum UserFansClubStatus {
         NOTJOINED = 0;
         ACTIVE = 1;
@@ -610,8 +538,6 @@ message User {
     }
 
 
-    // @PreferntialType
-    // webcast.data.User.FansClub
     enum PreferntialType {
       PRESONALPROFILE = 0;
       OTHERROOM = 1;
@@ -620,8 +546,6 @@ message User {
   }
 
 
-  // @FansClubInfo
-  // proto.webcast.data.User
   message FansClubInfo {
     bool isSleeping = 1;
     int64 fansLevel = 2;
@@ -631,8 +555,6 @@ message User {
   }
 
 
-  // @FollowInfo
-  // proto.webcast.data.User
   message FollowInfo {
     int64 followingCount = 1;
     int64 followerCount = 2;
@@ -641,16 +563,12 @@ message User {
   }
 
 
-  // @OwnRoom
-  // proto.webcast.data.User
   message OwnRoom {
     repeated int64 roomIdsList = 1;
     repeated string roomIdsStrList = 2;
   }
 
 
-  // @PayGrade
-  // proto.webcast.data.User
   message PayGrade {
     Image diamondIcon = 2;
     string name = 3;
@@ -676,8 +594,6 @@ message User {
     Image profileDialogBgBack = 1003;
 
 
-    // @GradeIcon
-    // proto.webcast.data.User.PayGrade
     message GradeIcon {
       Image icon = 1;
       int64 iconDiamond = 2;
@@ -688,16 +604,12 @@ message User {
   }
 
 
-  // @SubscribeBadge
-  // proto.webcast.data.User
   message SubscribeBadge {
     Image originImg = 3;
     Image previewImg = 4;
   }
 
 
-  // @SubscribeInfo
-  // proto.webcast.data.User
   message SubscribeInfo {
     bool qualification = 1;
     bool isSubscribe = 2;
@@ -711,8 +623,6 @@ message User {
   }
 
 
-  // @UserAttr
-  // proto.webcast.data.User
   message UserAttr {
     bool isMuted = 1;
     bool isAdmin = 2;
@@ -721,8 +631,6 @@ message User {
   }
 
 
-  // @UserStats
-  // proto.webcast.data.User
   message UserStats {
     int64 id = 1;
     string idStr = 2;
@@ -740,35 +648,25 @@ message User {
 
 }
 
-// @Emote
 message Emote {
   string emoteId = 1;
   Image image = 2;
-  AuditStatus auditStatus = 3; // Enum
   string uuid = 4;
-  EmoteType emoteType = 5; // Enum
-  ContentSource contentSource = 6; // Enum
-  EmotePrivateType emotePrivateType = 7; // Enum
 }
 
-// @PunishEventInfo
 message PunishEventInfo {
   string punishType = 1;
   string punishReason = 2;
   string punishId = 3;
   int64 violationUid = 4;
-  int32 punishTypeId = 5; // Enum
   int64 duration = 6;
 }
 
-// @MsgFilter
 message MsgFilter {
   bool isGifter = 1;
   bool isSubscribedToAnchor = 2;
 }
 
-// @UserIdentity
-// proto.webcast.data
 message UserIdentity {
   bool isGiftGiverOfAnchor = 1;
   bool isSubscriberOfAnchor = 2;
@@ -778,16 +676,10 @@ message UserIdentity {
   bool isAnchor = 6;
 }
 
-// @Goal
-// proto.webcast.data
 message Goal {
   int64 id = 1;
-  // TextType type = 2; // Enum
-  // GoalStatus status = 3; // Enum
-  // repeated SubGoal subGoalsList = 4;
   string description = 5;
   int32 auditStatus = 6;
-  // CycleType cycleType = 7; // Enum
   int64 startTime = 8;
   int64 expireTime = 9;
   int64 realFinishTime = 10;
@@ -817,15 +709,11 @@ message Goal {
 
 }
 
-// @Indicator
-// proto.webcast.data
 message Indicator {
   string key = 1;
-  int64 op = 2; // @warning Enum not found, should be Op
 }
 
 
-// --- HANDMANDE
 
 message Ranking {
   string type = 1;
@@ -859,7 +747,6 @@ message UserContainer {
   uint32 data1 = 2;
 }
 
-// Container for uint-Data
 message DataContainer {
   uint64 data1 = 1;
   uint32 data2 = 2;
@@ -881,7 +768,6 @@ message MemberMessageData {
   string type = 1;
   string label = 2;
   TikTokColor color = 3;
-  repeated MessageDetails details = 4; // UserContainer-Data is empty
 }
 message LinkMicArmiesItems {
   uint64 hostUserId = 1;
@@ -902,7 +788,6 @@ message PollStartContent {
 }
 
 message PollEndContent {
-  int32 EndType = 1; // Possibly an Enum?
   repeated PollOptionInfo OptionList = 2;
   User Operator = 3;
 }
@@ -936,4 +821,494 @@ message FanTicketRoomNoticeContent {
   int64 MatchId = 3;
   int64 EventTime = 4;
   string FanTicketIconUrl = 5;
+}
+
+message LinkerAcceptNoticeContent {
+  int64 fromUserId = 1;
+  int64 fromRoomId = 2;
+  int64 toUserId = 3;
+}
+
+message LinkerCancelContent {
+  int64 fromUserId = 1;
+  int64 toUserId = 2;
+  int64 cancelType = 3;
+  int64 actionId = 4;
+}
+
+message ListUser {
+  User user = 1;
+  int64 linkmicId = 2;
+  string linkmicIdStr = 3;
+  int32 userPosition = 6;
+  int64 modifyTime = 8;
+  int64 linkerId = 9;
+
+  enum LinkType {
+    LINK_UNKNOWN = 0;
+    AUDIO = 1;
+    VIDEO = 2;
+  }
+}
+
+
+message LinkerCloseContent {
+
+}
+
+message LinkerCreateContent {
+  int64 ownerId = 1;
+  int64 ownerRoomId = 2;
+  int64 linkType = 3;
+}
+
+
+
+message LinkerEnterContent {
+  repeated ListUser linkedUsersList = 1;
+  LinkmicUserSettingInfo anchorSettingInfo = 3;;
+}
+
+message LinkerInviteContent {
+  int64 fromUserId = 1;
+  int64 fromRoomId = 2;
+  string toRtcExtInfo = 3;
+  bool rtcJoinChannel = 4;
+  int64 vendor = 5;
+  string secFromUserId = 6;
+  string toLinkmicIdStr = 7;
+  User fromUser = 8;
+  int64 requiredMicIdx = 9;
+}
+
+message LinkerKickOutContent {
+  int64 fromUserId = 1;
+}
+
+message LinkerLeaveContent {
+  int64 userId = 1;
+  string linkmicIdStr = 2;
+  int64 sendLeaveUid = 3;
+  int64 leaveReason = 4;
+}
+
+message LinkerLinkedListChangeContent {
+
+}
+message CohostListChangeContent {
+}
+
+
+message LinkerListChangeContent {
+  repeated ListUser linkedUsersList = 1;
+  repeated ListUser appliedUsersList = 2;
+  repeated ListUser connectingUsersList = 3;
+}
+
+message LinkerMediaChangeContent {
+  int64 toUserId = 2;
+  int64 anchorId = 3;
+  int64 roomId = 4;
+}
+
+message LinkerMicIdxUpdateContent {
+
+}
+
+
+message LinkerMuteContent {
+  int64 userId = 1;
+}
+
+message LinkerRandomMatchContent {
+  User user = 1;
+  int64 roomId = 2;
+  int64 inviteType = 3;
+  string matchId = 4;
+  int64 innerChannelId = 5;
+}
+
+message LinkerReplyContent {
+  int64 fromUserId = 1;
+  int64 fromRoomId = 2;
+  LinkmicInfo fromUserLinkmicInfo = 3;
+  int64 toUserId = 4;
+  LinkmicInfo toUserLinkmicInfo = 5;
+  int64 linkType = 6;
+  int64 replyStatus = 7;
+  LinkerSetting linkerSetting = 8;
+  User fromUser = 9;
+  User toUser = 10;
+
+  message LinkmicInfo {
+    string accessKey = 1;
+    int64 linkMicId = 2;
+    bool joinable = 3;
+    int32 confluenceType = 4;
+    string rtcExtInfo = 5;
+    string rtcAppId = 6;
+    string rtcAppSign = 7;
+    string linkmicIdStr = 8;
+    int64 vendor = 9;
+  }
+}
+
+message LinkerSetting {
+  int64 MaxMemberLimit = 1;
+  int64 LinkType = 2;
+  int64 Scene = 3;
+  int64 OwnerUserId = 4;
+  int64 OwnerRoomId = 5;
+  int64 Vendor = 6;
+}
+
+message LinkerSysKickOutContent {
+  int64 userId = 1;
+  string linkmicIdStr = 2;
+}
+
+message LinkmicUserToastContent {
+  int64 userId = 1;
+  int64 roomId = 2;
+  Text displayText = 3;
+}
+
+message LinkerUpdateUserContent {
+  int64 fromUserId = 1;
+  int64 toUserId = 2;
+}
+
+message LinkerUpdateUserSettingContent {
+
+}
+
+message LinkerWaitingListChangeContent {
+
+}
+
+
+message LinkmicUserSettingInfo {
+  int64 userId = 1;
+}
+
+
+message Player {
+  int64 roomId = 1;
+  int64 userId = 2;
+}
+
+message AllListUser {
+  repeated LinkLayerListUser linkedList = 2;
+  repeated LinkLayerListUser appliedList = 3;
+  repeated LinkLayerListUser invitedList = 4;
+  repeated LinkLayerListUser readyList = 5;
+}
+
+message LinkLayerListUser {
+  User user = 1;
+  int64 linkmicId = 2;
+  Position pos = 3;
+  int64 linkedTimeNano = 4;
+  string appVersion = 5;
+  int64 magicNumber1 = 7;
+}
+
+message Position {
+  int32 type = 1;
+  LinkPosition link = 2;
+}
+
+message LinkPosition {
+  int32 position = 1;
+  int32 opt = 2;
+}
+
+message GroupPlayer {
+  int64 channelId = 1;
+  User user = 2;
+}
+
+message DSLConfig {
+  int32 sceneVersion = 1;
+  string layoutId = 2;
+}
+
+message GroupChannelAllUser {
+  int64 groupChannelId = 1;
+  repeated GroupChannelUser userList = 2;
+}
+
+message GroupChannelUser {
+  int64 channelId = 1;
+  AllListUser allUser = 4;
+  int64 joinTime = 5;
+  int64 linkedTime = 6;
+  GroupPlayer ownerUser = 7;
+}
+
+message RTCExtraInfo {
+  RTCEngineConfig liveRtcEngineConfig = 1;
+  repeated RTCLiveVideoParam liveRtcVideoParamList = 2;
+  RTCBitrateMap rtcBitrateMap = 3;
+  int32 rtcFps = 4;
+  string rtcBusinessId = 8;
+  int32 interactClientType = 10;
+
+  message RTCEngineConfig {
+    string rtcAppId = 1;
+    string rtcUserId = 2;
+    string rtcToken = 3;
+    int64 rtcChannelId = 4;
+  }
+
+  message RTCLiveVideoParam {
+    int32 strategyId = 1;
+    RTCVideoParam params = 2;
+  }
+
+  message RTCVideoParam {
+    int32 width = 1;
+    int32 height = 2;
+    int32 fps = 3;
+    int32 bitrateKbps = 4;
+  }
+
+  message RTCBitrateMap {
+    int32 xx1 = 1;
+    int32 xx2 = 2;
+    int32 xx3 = 3;
+    int32 xx4 = 4;
+  }
+}
+
+message CreateChannelContent {
+  Player  owner = 1;
+  string ownerLinkMicId = 2;
+}
+
+message ListChangeContent {
+  AllListUser list = 2;
+}
+
+message MultiLiveContent {
+  InviteBizContent inviteBizContent = 2;
+  ReplyBizContent replyBizContent = 3;
+  PermitBizContent permitBizContent = 4;
+  KickOutBizContent kickOutBizContent = 6;
+
+
+  message InviteBizContent {
+    LinkmicUserSettingInfo anchorSettingInfo = 1;
+    User operatorUserInfo = 3;
+    User inviteeUserInfo = 5;
+  }
+
+
+  message ReplyBizContent {
+    int32 linkType = 1;
+    int32 isTurnOffInvitation = 2;
+    User replyUserInfo = 3;
+  }
+
+  message PermitBizContent {
+    LinkmicUserSettingInfo anchorSettingInfo = 1;
+    int64 expireTimestamp = 2;
+    User operatorUserInfo = 3;
+  }
+
+  message KickOutBizContent {
+    User operatorUserInfo = 1;
+    User kickPlayerUserInfo = 3;
+  }
+
+}
+
+
+message InviteContent {
+  Player  invitor = 1;
+  RTCExtraInfo inviteeRtcExtInfo = 2;
+  string invitorLinkMicId = 3;
+  string inviteeLinkMicId = 4;
+  bool isOwner = 5;
+  Position pos = 6;
+  DSLConfig dsl = 7;
+  User invitee = 8;
+  User operator = 9;
+}
+
+
+message ApplyContent {
+  Player  applier = 1;
+  string applierLinkMicId = 2;
+}
+
+
+message PermitApplyContent {
+  Player  permiter = 1;
+  string permiterLinkMicId = 2;
+  Position applierPos = 3;
+  DSLConfig dsl = 5;
+  User applier = 6;
+  User operator = 7;
+  string applierLinkMicId = 8;
+}
+
+
+message ReplyInviteContent {
+  Player  invitee = 1;
+  string inviteeLinkMicId = 3;
+  Position inviteePos = 4;
+  Player  inviteOperatorUser = 5;
+}
+
+
+message KickOutContent {
+  Player  offliner = 1;
+}
+
+
+message CancelApplyContent {
+  Player  applier = 1;
+  string applierLinkMicId = 2;
+}
+
+
+message CancelInviteContent {
+  Player  invitor = 1;
+  string invitorLinkMicId = 2;
+  string inviteeLinkMicId = 3;
+  int64 inviteSeqId = 4;
+  Player  invitee = 5;
+}
+
+
+message LeaveContent {
+  Player  leaver = 1;
+  int64 leaveReason = 2;
+}
+
+
+message FinishChannelContent {
+  Player  owner = 1;
+  int64 finishReason = 2;
+}
+
+
+message JoinDirectContent {
+  LinkLayerListUser joiner = 1;
+  AllListUser allUsers = 2;
+}
+
+
+message LeaveJoinGroupContent {
+  GroupPlayer operator = 1;
+  int64 groupChannelId = 2;
+  string leaveSource = 3;
+}
+
+
+message PermitJoinGroupContent {
+  GroupPlayer approver = 1;
+  repeated RTCExtraInfo groupExtInfoList = 4;
+  GroupChannelAllUser groupUser = 5;
+}
+
+
+message CancelJoinGroupContent {
+  repeated GroupPlayer leaverList = 1;
+  GroupPlayer operator = 2;
+}
+
+
+
+message P2PGroupChangeContent {
+  repeated RTCExtraInfo groupExtInfoList = 1;
+  GroupChannelAllUser groupUser = 2;
+}
+
+
+message BusinessContent {
+  int64 overLength = 1;
+  MultiLiveContent multiLiveContent = 100;
+  CohostContent cohostContent = 200;
+
+  message CohostContent {
+    JoinGroupBizContent joinGroupBizContent = 1;
+
+  }
+
+  message JoinGroupBizContent {
+    int32 fromRoomAgeRestricted = 1;
+    Tag fromTag = 2;
+    PerceptionDialogInfo dialog = 3;
+    PunishEventInfo punishInfo = 4;
+    JoinGroupMessageExtra joinGroupMsgExtra = 101;
+  }
+
+  message Tag {
+    int32 tagType = 1;
+    string tagValue = 2;
+    string tagText = 3;
+  }
+
+  message PerceptionDialogInfo {
+    Text title = 2;
+    Text subTitle = 3;
+    Text adviceActionText = 4;
+    Text defaultActionText = 5;
+    string violationDetailUrl = 6;
+    int32 scene = 7;
+    int64 targetUserId = 8;
+    int64 targetRoomId = 9;
+    int64 countDownTime = 10;
+    bool showFeedback = 11;
+    repeated PerceptionFeedbackOption feedbackOptionsList = 12;
+    int64 policyTip = 13;
+  }
+
+  message PerceptionFeedbackOption {
+    int64 id = 1;
+    string contentKey = 2;
+  }
+
+  message JoinGroupMessageExtra {
+    int64 sourceType = 1;
+    RivalExtra extra = 2;
+    repeated RivalExtra otherUsersList = 3;
+
+
+    message RivalExtra {
+      int64 userCount = 4;
+      Image avatarThumb = 5;
+      string displayId = 6;
+      AuthenticationInfo authenticationInfo = 7;
+      string nickname = 8;
+      int64 followStatus = 9;
+      Hashtag hashtag = 10;
+      TopHostInfo topHostInfo = 11;
+      int64 userId = 12;
+      bool isBestTeammate = 13;
+
+      message AuthenticationInfo {
+        string customVerify = 1;
+        string enterpriseVerifyReason = 2;
+        Image authenticationBadge = 3;
+      }
+    }
+  }
+  message Hashtag {
+    int64 id = 1;
+    string title = 2;
+    Image image = 3;
+  }
+
+  message TopHostInfo {
+    string rankType = 1;
+    int64 topIndex = 2;
+  }
+}
+
+message JoinGroupContent {
+  GroupChannelAllUser groupUser = 1;
+  GroupPlayer joinUser = 2;
 }

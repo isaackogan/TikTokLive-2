@@ -1,0 +1,6 @@
+syntax = "proto3";
+
+message WebcastWebsocketAck {
+  uint64 Id = 1;
+  string Type = 2;
+}

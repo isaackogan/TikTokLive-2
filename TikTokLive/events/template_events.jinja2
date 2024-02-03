@@ -8,13 +8,6 @@
 {{ i }}
 {% endfor %}
 
-{# Event Mappings #}
-EVENT_MAPPINGS: Dict[str, str] = {
-    {% for i in events %}
-    "{{ i.proto_name }}": "{{ i.class_name }}",
-    {% endfor %}
-}
-
 {# New Events #}
 {% for i in events %}
 {% if i.write_class %}
@@ -32,6 +25,13 @@ class {{ i.class_name }}(BaseEvent, {{ i.proto_name }}):
 {{ c[1] }}
 
 {% endfor %}
+{# Event Mappings #}
+EVENT_MAPPINGS: Dict[str, BaseEvent] = {
+    {% for i in events %}
+    "{{ i.proto_name }}": {{ i.class_name }},
+    {% endfor %}
+}
+
 {# Types #}
 ProtoEvent: Type = Union[
     {% for i in events %}
