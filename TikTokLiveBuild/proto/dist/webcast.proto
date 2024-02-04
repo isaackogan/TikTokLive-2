@@ -1,11 +1,8 @@
 syntax = "proto3";
 
-import "custom.proto";
 import "data.proto";
 import "enums.proto";
 
-//@WebcastPushFrame
-// Response from TikTokServer. Container for Messages
 message WebcastPushFrame {
   uint64 SeqId = 1;
   uint64 LogId = 2;
@@ -20,8 +17,6 @@ message WebcastPushFrame {
 
 
 
-//@WebcastResponse
-// Response from TikTokServer. Container for Messages
 message WebcastResponse {
   repeated Message messages = 1;
   string cursor = 2;
@@ -37,8 +32,7 @@ message WebcastResponse {
   string historyCommentCursor = 12;
   bool historyNoMore = 13;
 
-  // Server-Message. Binary will deserialize into specific message
-  message Message {
+    message Message {
     string method = 1;
     bytes payload = 2;
     int64 msgId = 3;
@@ -48,7 +42,6 @@ message WebcastResponse {
   }
 }
 
-//@GiftMessage
 message WebcastGiftMessage {
   Common common = 1;
   int64 giftId = 2;
@@ -90,7 +83,6 @@ message WebcastGiftMessage {
   }
 }
 
-//@RoomMessage
 message RoomMessage {
   Common common = 1;
   string content = 2;
@@ -101,18 +93,15 @@ message RoomMessage {
   bool isWelcome = 7;
 }
 
-//@WebcastRoomMessage
 message WebcastRoomMessage {
   Common common = 1;
   string content = 2;
 }
 
-//@WebcastBarrageMessage
 message WebcastBarrageMessage {
   Common common = 1;
   BarrageEvent event = 2;
-  BarrageType msgType = 3; // Enum
-  Image icon = 4;
+  BarrageType msgType = 3;   Image icon = 4;
   Text content = 5;
   int32 duration = 6;
   Image background = 7;
@@ -141,9 +130,7 @@ message WebcastBarrageMessage {
     string eventName = 1;
   }
 
-  // @BarrageType
-  // webcast.im.BarrageMessage
-  enum BarrageType {
+      enum BarrageType {
     UNKNOWN = 0;
     ECOMORDERING = 1;
     ECOMBUYING = 2;
@@ -160,8 +147,6 @@ message WebcastBarrageMessage {
   }
 }
 
-//@WebcastCaptionMessage
-// Closed Captioning for Video
 message WebcastCaptionMessage {
   Common common = 1;
   uint64 timeStamp = 2;
@@ -175,8 +160,6 @@ message WebcastCaptionMessage {
 
 
 
-// Comment sent by User
-//@WebcastChatMessage
 message WebcastChatMessage {
   Common common = 1;
   User user = 2;
@@ -195,30 +178,23 @@ message WebcastChatMessage {
   UserIdentity UserIdentity = 18;
   map<string, string> CommentQualityScores = 19;
 
-  // @EmoteWithIndex
-  // proto.webcast.im.ChatMessage
-  message EmoteWithIndex {
+      message EmoteWithIndex {
     int64 index = 1;
     Emote emote = 2;
   }
 }
 
-// System-Control Message from Room (e.g. Host ended Stream)
-//@WebcastControlMessage
 message WebcastControlMessage {
   Common common = 1;
   ControlAction action = 2;
   string tips = 3;
   Extra extra = 4;
-  //PerceptionDialogInfo perceptionDialog = 5;
-  Text perceptionAudienceText = 6;
+    Text perceptionAudienceText = 6;
   PunishEventInfo punishInfo = 7;
   Text floatText = 8;
   int32 floatStyle = 9;
 
-  // @Extra
-  // proto.webcast.im.ControlMessage
-  message Extra {
+      message Extra {
     string banInfoUrl = 1;
     int64 reasonNo = 2;
     Text title = 3;
@@ -230,8 +206,6 @@ message WebcastControlMessage {
   }
 }
 
-// Emote sent by user
-//@WebcastEmoteChatMessage
 message WebcastEmoteChatMessage {
   Common common = 1;
   User user = 2;
@@ -240,15 +214,11 @@ message WebcastEmoteChatMessage {
   UserIdentity userIdentity = 5;
 }
 
-//@WebcastEnvelopeMessage
 message WebcastEnvelopeMessage {
   Common common = 1;
   EnvelopeInfo envelopeInfo = 2;
-  EnvelopeDisplay display = 3; // @warning Enum not found, should be Display
-
-  // @EnvelopeInfo
-  // proto.webcast.im.EnvelopeMessage
-  message EnvelopeInfo {
+  EnvelopeDisplay display = 3; 
+      message EnvelopeInfo {
     string envelopeId = 1;
     EnvelopeBusinessType businessType = 2;
     string envelopeIdc = 3;
@@ -260,12 +230,10 @@ message WebcastEnvelopeMessage {
     Image sendUserAvatar = 9;
     string createAt = 10;
     string roomId = 11;
-    EnvelopeFollowShowStatus followShowStatus = 12; // @warning Enum not found, should be FollowShowStatus
-    int32 skinId = 13;
+    EnvelopeFollowShowStatus followShowStatus = 12;     int32 skinId = 13;
   }
 }
 
-//@WebcastGoalUpdateMessage
 message WebcastGoalUpdateMessage {
   Common common = 1;
   Indicator indicator = 2;
@@ -273,32 +241,24 @@ message WebcastGoalUpdateMessage {
   int64 contributorId = 4;
   Image contributorAvatar = 5;
   string contributorDisplayId = 6;
-  //  SubGoal contributeSubgoal = 7;
-  int64 contributeCount = 9;
+    int64 contributeCount = 9;
   int64 contributeScore = 10;
   int64 giftRepeatCount = 11;
   string contributorIdStr = 12;
   bool pin = 13;
   bool unpin = 14;
-  // GoalPinInfo pinInfo = 15;
-}
+  }
 
-// Message related to Chat-moderation?
-//@WebcastImDeleteMessage
 message WebcastImDeleteMessage {
   Common common = 1;
   repeated int64 deleteMsgIdsList = 2;
   repeated int64 deleteUserIdsList = 3;
 }
 
-//@WebcastInRoomBannerMessage
 message WebcastInRoomBannerMessage {
   Common header = 1;
-  string json = 2; // Json-Data for BannerMessage
-}
+  string json = 2; }
 
-// User sent one or multiple likes to Stream. Maxes at 15 likes per message
-//@WebcastLikeMessage
 message WebcastLikeMessage {
   Common common = 1;
   int32 count = 2;
@@ -306,8 +266,6 @@ message WebcastLikeMessage {
   User user = 5;
 }
 
-// Status of Room (ViewerCount + Top Viewers)
-//@WebcastRoomUserSeqMessage
 message WebcastRoomUserSeqMessage {
   Common common = 1;
   repeated Contributor ranksList = 2;
@@ -318,8 +276,7 @@ message WebcastRoomUserSeqMessage {
   int32 totalUser = 7;
   int64 anonymous = 8;
 
-  // @Contributor
-  message Contributor {
+    message Contributor {
     int32 score = 1;
     User user = 2;
     int32 rank = 3;
@@ -327,8 +284,6 @@ message WebcastRoomUserSeqMessage {
   }
 }
 
-// Sent for a variety of events, including Follow & Share
-//@WebcastSocialMessage
 message WebcastSocialMessage {
   Common common = 1;
   User user = 2;
@@ -340,55 +295,40 @@ message WebcastSocialMessage {
   int32 shareCount = 8;
 }
 
-//@WebcastSubNotifyMessage
 message WebcastSubNotifyMessage {
   Common common = 1;
   User user = 2;
-  //  ExhibitionType exhibitionType = 3; // Enum
-  int64 subMonth = 4;
-  SubscribeType subscribeType = 5; // Enum
-  OldSubscribeStatus oldSubscribeStatus = 6; // Enum
-  SubscribingStatus subscribingStatus = 8; // Enum
-  bool isSend = 9;
+    int64 subMonth = 4;
+  SubscribeType subscribeType = 5;   OldSubscribeStatus oldSubscribeStatus = 6;   SubscribingStatus subscribingStatus = 8;   bool isSend = 9;
   bool isCustom = 10;
 
 }
 
-//@WebcastRankUpdateMessage
 message WebcastRankUpdateMessage {
   Common common = 1;
   repeated RankUpdate updatesList = 2;
-  int64 groupType = 3; // @warning Enum not found, should be GroupType
-  int64 priority = 5;
+  int64 groupType = 3;   int64 priority = 5;
   repeated RankTabInfo tabsList = 6;
   bool isAnimationLoopPlay = 7;
   bool animationLoopForOff = 8;
 
 
   message RankTabInfo {
-    int64 rankType = 1; // @warning Enum not found, should be RankType
-    string title = 2;
+    int64 rankType = 1;     string title = 2;
     Text titleText = 3;
     int64 listLynxType = 4;
   }
 
-  // @RankUpdate
-  // proto.webcast.im.RankUpdateMessage
-  message RankUpdate {
-    int64 rankType = 1; // @warning Enum not found, should be RankType
-    int64 ownerRank = 2;
+      message RankUpdate {
+    int64 rankType = 1;     int64 ownerRank = 2;
     Text defaultContent = 3;
     bool showEntranceAnimation = 5;
     int64 countdown = 6;
-    int64 relatedTabRankType = 8; // @warning Enum not found, should be RelatedTabRankType
-    int64 requestFirstShowType = 9; // @warning Enum not found, should be RequestFirstShowType
-    int64 supportedVersion = 10;
+    int64 relatedTabRankType = 8;     int64 requestFirstShowType = 9;     int64 supportedVersion = 10;
     bool owneronrank = 11;
   }
 }
 
-// Sent for a variety of events, including Join & Subscribe
-//@WebcastMemberMessage
 message WebcastMemberMessage {
   Common common = 1;
   User user = 2;
@@ -414,10 +354,7 @@ message WebcastMemberMessage {
   int64 actionDuration = 22;
   string userShareType = 23;
 
-  // @EffectConfig
-  // proto.webcast.im.MemberMessage
-  // C:\Users\ja\RiderProjects\TikTokProBufferGenerator\Application\output\sources\test.js
-  message EffectConfig {
+        message EffectConfig {
     int64 type = 1;
     Image icon = 2;
     int64 avatarPos = 3;
@@ -434,8 +371,6 @@ message WebcastMemberMessage {
 
 
 
-// --- HandMade --
-//@WebcastPollMessage
 message WebcastPollMessage {
   Common common = 1;
   MessageType messageType = 2;
@@ -443,10 +378,8 @@ message WebcastPollMessage {
   PollStartContent startContent = 4;
   PollEndContent endContent = 5;
   PollUpdateVotesContent updateContent = 6;
-  int32 pollKind = 7; // Possibly an Enum?
-}
+  int32 pollKind = 7; }
 
-//@WebcastQuestionNewMessage
 message WebcastQuestionNewMessage {
   Common common = 1;
   QuestionDetails details = 2;
@@ -460,7 +393,6 @@ message WebcastQuestionNewMessage {
   }
 }
 
-//@WebcastRankTextMessage
 message WebcastRankTextMessage {
   Common common = 1;
   int32 scene = 2;
@@ -471,7 +403,6 @@ message WebcastRankTextMessage {
   int64 curUserId = 7;
 }
 
-//@WebcastHourlyRankMessage
 message WebcastHourlyRankMessage {
   Common common = 1;
   RankContainer data = 2;
@@ -504,9 +435,7 @@ message WebcastHourlyRankMessage {
 }
 
 
-//<Battles>
 
-//@WebcastLinkMicArmies
 message WebcastLinkMicArmies {
   Common common = 1;
   uint64 id = 2;
@@ -514,15 +443,13 @@ message WebcastLinkMicArmies {
   uint64 id2 = 4;
   uint64 timeStamp1 = 5;
   uint64 timeStamp2 = 6;
-  int32 battleStatus = 7; // SHOULD BE AN ENUM
-  uint64 data1 = 8;
+  int32 battleStatus = 7;   uint64 data1 = 8;
   uint64 data2 = 9;
   uint32 data3 = 10;
   Image Image = 11;
   uint32 data4 = 12;
   uint32 data5 = 13;
 }
-//@WebcastLinkMicBattlePunishFinish
 message WebcastLinkMicBattlePunishFinish {
   Common Header = 1;
   uint64 Id1 = 2;
@@ -532,17 +459,14 @@ message WebcastLinkMicBattlePunishFinish {
   LinkMicBattlePunishFinishData Data6 = 6;
 
   message LinkMicBattlePunishFinishData {
-    uint64 Id2 = 1; // Same as Id2 in outer object (loser?)
-    uint64 Timestamp = 2;
+    uint64 Id2 = 1;     uint64 Timestamp = 2;
     uint32 Data3 = 3;
-    uint64 Id1 = 4; // Same as Id1 in outer object (winner?)
-    uint32 Data5 = 5;
+    uint64 Id1 = 4;     uint32 Data5 = 5;
     uint32 Data6 = 6;
     uint32 Data8 = 8;
   }
 }
 
-//@WebcastLinkmicBattleTaskMessage
 message WebcastLinkmicBattleTaskMessage {
   Common Header = 1;
   uint32 Data2 = 2;
@@ -562,7 +486,6 @@ message WebcastLinkmicBattleTaskMessage {
   }
 }
 
-//@WebcastLinkMicBattle
 message WebcastLinkMicBattle {
   Common common = 1;
   uint64 id = 2;
@@ -605,12 +528,10 @@ message WebcastLinkMicBattle {
   }
 }
 
-//@WebcastLinkMicFanTicketMethod
 message WebcastLinkMicFanTicketMethod {
   Common common = 1;
   FanTicketRoomNoticeContent FanTicketRoomNotice = 2;
 }
-//@WebcastLinkMicMethod
 message WebcastLinkMicMethod {
   Common common = 1;
   MessageType messageType = 2;
@@ -627,9 +548,7 @@ message WebcastLinkMicMethod {
   int64 inviteUid = 13;
 }
 
-//<Battles>
 
-//@WebcastLiveIntroMessage
 message WebcastLiveIntroMessage {
   Common common = 1;
   int64 roomId = 2;
@@ -641,7 +560,6 @@ message WebcastLiveIntroMessage {
   string language = 8;
 }
 
-//@WebcastUnauthorizedMemberMessage
 message WebcastUnauthorizedMemberMessage {
   Common common = 1;
   int32 action = 2;
@@ -650,14 +568,11 @@ message WebcastUnauthorizedMemberMessage {
   Text enterText = 5;
 }
 
-//@WebcastMsgDetectMessage
 message WebcastMsgDetectMessage {
   Common common = 1;
-  int32 detectType = 2; // Possibly an Enum?
-  TriggerCondition triggerCondition = 3;
+  int32 detectType = 2;   TriggerCondition triggerCondition = 3;
   TimeInfo timeInfo = 4;
-  int32 triggerBy = 5; // Possible an Enum?
-  string fromRegion = 6;
+  int32 triggerBy = 5;   string fromRegion = 6;
 
   message TimeInfo {
     int64 clientStartMs = 1;
@@ -674,22 +589,18 @@ message WebcastMsgDetectMessage {
   }
 }
 
-//@WebcastOecLiveShoppingMessage
 message WebcastOecLiveShoppingMessage {
   Common common = 1;
   uint32 data1 = 2;
   LiveShoppingData shopData = 4;
-  TimeStampContainer shopTimings = 5; // Uses index 1, 2 & 3
-  LiveShoppingDetails details = 9;
+  TimeStampContainer shopTimings = 5;   LiveShoppingDetails details = 9;
 
   message LiveShoppingData {
     string title = 1;
-    string priceString = 2; // $55.99
-    string imageUrl = 3;
+    string priceString = 2;     string imageUrl = 3;
     string shopUrl = 4;
     uint64 data1 = 6;
-    string shopName = 7; // "Shopify"
-    uint64 data2 = 8;
+    string shopName = 7;     uint64 data2 = 8;
     string shopUrl2 = 9;
     uint64 data3 = 10;
     uint64 data4 = 11;
@@ -704,22 +615,16 @@ message WebcastOecLiveShoppingMessage {
   }
 }
 
-//@WebcastRoomPinMessage
-// Host Pins comment to stream
 message WebcastRoomPinMessage {
   Common common = 1;
-  bytes pinnedMessage = 2; // Usually this is a ChatMessage, but it can also be another message.
-  string originalMsgType = 30; // Use this Type/Method to Deserialize the PinnedMessage
-  uint64 timestamp = 31;
+  bytes pinnedMessage = 2;   string originalMsgType = 30;   uint64 timestamp = 31;
 }
 
-//@SystemMessage
 message WebcastSystemMessage {
   Common common = 1;
   string message = 2;
 }
 
-//@WebcastLinkMessage
 message WebcastLinkMessage {
   Common common = 1;
   LinkMessageType MessageType = 2;
@@ -752,13 +657,10 @@ message WebcastLinkMessage {
 }
 
 
-// @WebcastLinkLayerMessage
 message WebcastLinkLayerMessage {
   Common common = 1;
-  MessageType messageType = 2; // Enum
-  int64 channelId = 3;
-  Scene scene = 4; // Enum
-  CreateChannelContent createChannelContent = 100;
+  MessageType messageType = 2;   int64 channelId = 3;
+  Scene scene = 4;   CreateChannelContent createChannelContent = 100;
   ListChangeContent listChangeContent = 102;
   InviteContent inviteContent = 103;
   ApplyContent applyContent = 104;
@@ -778,7 +680,6 @@ message WebcastLinkLayerMessage {
   BusinessContent businessContent = 200;
 }
 
-// @RoomVerifyMessage
 message RoomVerifyMessage {
   Common common = 1;
   int32 action = 2;

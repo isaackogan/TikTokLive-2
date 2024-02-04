@@ -4,8 +4,9 @@ from types import ModuleType
 from typing import List, get_type_hints, Dict, Optional, Type, Tuple, Generator
 
 import betterproto
+import jinja2
 
-from TikTokLive.proto import Common
+from TikTokLive.proto.tiktok_proto import Common
 
 MESSAGE_OVERRIDES: Dict[str, str] = {
     "WebcastMsgDetectMessage": "MessageDetectEvent",
@@ -13,9 +14,11 @@ MESSAGE_OVERRIDES: Dict[str, str] = {
 }
 
 BASE_IMPORTS: List[str] = [
-    "from typing import Dict, Type, Union",
-    "from TikTokLive.proto import *",
-    "from ...events.event import BaseEvent"
+    "from dataclasses import dataclass",
+    "from TikTokLive.proto.tiktok_proto import *",
+    "from TikTokLive.proto.custom_proto import *",
+    "from .base import BaseEvent",
+    "from typing import Type, Union, Dict"
 ]
 
 
@@ -74,9 +77,9 @@ class EventsTranscriber:
             file.write(output)
 
     def generate_events(self) -> Generator[dict, None, None]:
-        from TikTokLive import proto
+        from TikTokLive.proto import tiktok_proto
 
-        for name, item in proto.__dict__.items():
+        for name, item in tiktok_proto.__dict__.items():
 
             # Must be an event message
             if not is_proto_event(name, item):
@@ -170,15 +173,4 @@ class PreviousMod:
             imports.append(line)
 
         return imports
-
-
-if __name__ == '__main__':
-    import jinja2
-
-    EventsTranscriber(
-        template_dir="./",
-        template_name="template_events.jinja2",
-        output_path="types/proto_events.py",
-        merge_path="TikTokLive.events.types.proto_events"
-    )()
 

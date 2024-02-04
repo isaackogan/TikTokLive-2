@@ -27,7 +27,7 @@ message Common {
   int64 foldTypeForWeb = 23;
   int64 anchorFoldTypeForWeb = 24;
   int64 clientSendTime = 25;
-
+  IMDispatchStrategy dispatchStrategy = 26; 
   message LiveMessageSEI {
     LiveMessageID uniqueId = 1;
     int64 timestamp = 2;
@@ -75,7 +75,7 @@ message Text {
 
   message TextPieceGift {
     int32 giftId = 1;
-    int64 colorId = 4;
+            int64 colorId = 4;
   }
 
   message TextPiecePatternRef {
@@ -96,7 +96,7 @@ message Image {
 }
 
 message BadgeStruct {
-  oneof badgeType
+  BadgeDisplayType displayType = 1;   oneof badgeType
   {
     ImageBadge image = 20;
     TextBadge text = 21;
@@ -108,7 +108,7 @@ message BadgeStruct {
     Image icon = 2;
     TextBadge text = 3;
     string str = 4;
-    ProfileCardPanel profileCardPanel = 7;
+            ProfileCardPanel profileCardPanel = 7;
     CombineBadgeBackground background = 11;
     CombineBadgeBackground backgroundDarkMode = 12;
     bool iconAutoMirrored = 13;
@@ -117,7 +117,7 @@ message BadgeStruct {
     int32 personalCardShowStyle = 16;
     int32 ranklistOnlineAudienceShowStyle = 17;
     int32 multiGuestShowStyle = 18;
-  }
+      }
 
   message ProfileContent {
     bool useContent = 1;
@@ -132,13 +132,13 @@ message BadgeStruct {
 
   message NumberConfig {
     int64 number = 1;
-    CombineBadgeBackground background = 3;
+        CombineBadgeBackground background = 3;
   }
 
 
   message ProfileCardPanel {
     bool useNewProfileCardStyle = 1;
-    ProjectionConfig projectionConfig = 3;
+        ProjectionConfig projectionConfig = 3;
     ProfileContent profileContent = 4;
   }
 
@@ -216,9 +216,9 @@ message GiftStruct {
   bool isRandomGift = 51;
   bool isBoxGift = 52;
   bool canPutInGiftBox = 53;
+  
 
-
-  message GiftPanelBanner {
+      message GiftPanelBanner {
     Text displayText = 1;
     Image leftIcon = 2;
     string schemaUrl = 3;
@@ -227,7 +227,7 @@ message GiftStruct {
   }
 
 
-  message GiftRandomEffectInfo {
+      message GiftRandomEffectInfo {
     RandomGiftPanelBanner randomGiftPanelBanner = 1;
     repeated int64 effectIdsList = 2;
     string hostKey = 3;
@@ -236,13 +236,13 @@ message GiftStruct {
   }
 
 
-  message RandomGiftBubble {
+      message RandomGiftBubble {
     string displayText = 1;
     Image iconDynamicEffect = 2;
   }
 
 
-  message RandomGiftPanelBanner {
+      message RandomGiftPanelBanner {
     Image bgImage = 1;
     Image shadingImage = 2;
     int64 targetNum = 3;
@@ -357,16 +357,16 @@ message User {
     bool hasSubscribed = 6;
     bool isPaidEvent = 7;
     int64 ticketAmount = 8;
+    int64 payMethod = 9; 
 
-
-    enum EventPayMethod {
+                enum EventPayMethod {
       EVENTPAYMETHODINVALID = 0;
       EVENTPAYMETHODCOINS = 1;
       EVENTPAYMETHODCASH = 2;
     }
 
 
-    message WalletPackage {
+                message WalletPackage {
       string iapId = 1;
       string usdPriceShow = 2;
     }
@@ -374,14 +374,14 @@ message User {
   }
 
 
-  message ActivityInfo {
+        message ActivityInfo {
     Image badge = 1;
     Image storytag = 2;
   }
 
 
 
-  message AnchorLevel {
+        message AnchorLevel {
     int64 level = 1;
     int64 experience = 2;
     int64 lowestExperienceThisLevel = 3;
@@ -398,14 +398,14 @@ message User {
   }
 
 
-  message AuthenticationInfo {
+        message AuthenticationInfo {
     string customVerify = 1;
     string enterpriseVerifyReason = 2;
     Image authenticationBadge = 3;
   }
 
 
-  message AuthorStats {
+        message AuthorStats {
     int64 videoTotalCount = 1;
     int64 videoTotalPlayCount = 2;
     int64 videoTotalShareCount = 3;
@@ -415,7 +415,7 @@ message User {
   }
 
 
-  message Border {
+        message Border {
     Image icon = 1;
     int64 level = 2;
     string source = 3;
@@ -425,19 +425,19 @@ message User {
   }
 
 
-  message ComboBadgeInfo {
+        message ComboBadgeInfo {
     Image icon = 1;
     int64 comboCount = 2;
   }
 
 
-  message EcommerceEntrance {
-    string schema = 3;
+        message EcommerceEntrance {
+    EntranceType entranceType = 1;     CreatorType creatorType = 2;     string schema = 3;
     ShopEntranceInfo shopEntranceInfo = 4;
     ShowcaseEntranceInfo showcaseEntranceInfo = 5;
 
 
-    enum CreatorType {
+                enum CreatorType {
       UNDEFINED = 0;
       OFFICIAL = 1;
       MARKET = 2;
@@ -445,14 +445,14 @@ message User {
     }
 
 
-    enum EntranceType {
+                enum EntranceType {
       PROFILE = 0;
       SHOWCASE = 1;
       SHOP = 2;
     }
 
 
-    message ShopEntranceInfo {
+                message ShopEntranceInfo {
       string shopId = 1;
       string shopName = 2;
       string shopRating = 3;
@@ -465,12 +465,12 @@ message User {
       bool showRateNotApplicable = 10;
 
 
-      message StoreLabel {
+                        message StoreLabel {
         StoreOfficialLabel officialLabel = 1;
         bool isBytemall = 2;
 
 
-        enum StoreBrandLabelType {
+                                enum StoreBrandLabelType {
           NONE = 0;
           OFFICIAL = 1;
           AUTHORIZED = 2;
@@ -479,13 +479,13 @@ message User {
         }
 
 
-        message StoreOfficialLabel {
+                                message StoreOfficialLabel {
           ShopLabelImage labelImageLight = 1;
           ShopLabelImage labelImageDark = 2;
-          string labelTypeStr = 4;
+          int64 labelType = 3;           string labelTypeStr = 4;
 
 
-          message ShopLabelImage {
+                                        message ShopLabelImage {
             int32 height = 1;
             int32 width = 2;
             string minetype = 3;
@@ -503,7 +503,7 @@ message User {
     }
 
 
-    message ShowcaseEntranceInfo {
+                message ShowcaseEntranceInfo {
       string formatSoldCount = 1;
       int64 soldCount = 2;
     }
@@ -511,25 +511,25 @@ message User {
   }
 
 
-  message FansClub {
+        message FansClub {
     FansClubData data = 1;
 
 
-    message FansClubData {
+                message FansClubData {
       string clubName = 1;
       int32 level = 2;
-      repeated int64 availableGiftIdsList = 5;
+      UserFansClubStatus userFansClubStatus = 3;       repeated int64 availableGiftIdsList = 5;
       int64 anchorId = 6;
 
 
-      enum BadgeIcon {
+                        enum BadgeIcon {
         UNKNOWN = 0;
         ICON = 1;
         SMALLICON = 2;
       }
 
 
-      enum UserFansClubStatus {
+                        enum UserFansClubStatus {
         NOTJOINED = 0;
         ACTIVE = 1;
         INACTIVE = 2;
@@ -538,7 +538,7 @@ message User {
     }
 
 
-    enum PreferntialType {
+                enum PreferntialType {
       PRESONALPROFILE = 0;
       OTHERROOM = 1;
     }
@@ -546,7 +546,7 @@ message User {
   }
 
 
-  message FansClubInfo {
+        message FansClubInfo {
     bool isSleeping = 1;
     int64 fansLevel = 2;
     int64 fansScore = 3;
@@ -555,7 +555,7 @@ message User {
   }
 
 
-  message FollowInfo {
+        message FollowInfo {
     int64 followingCount = 1;
     int64 followerCount = 2;
     int64 followStatus = 3;
@@ -563,13 +563,13 @@ message User {
   }
 
 
-  message OwnRoom {
+        message OwnRoom {
     repeated int64 roomIdsList = 1;
     repeated string roomIdsStrList = 2;
   }
 
 
-  message PayGrade {
+        message PayGrade {
     Image diamondIcon = 2;
     string name = 3;
     Image icon = 4;
@@ -594,7 +594,7 @@ message User {
     Image profileDialogBgBack = 1003;
 
 
-    message GradeIcon {
+                message GradeIcon {
       Image icon = 1;
       int64 iconDiamond = 2;
       int64 level = 3;
@@ -604,13 +604,13 @@ message User {
   }
 
 
-  message SubscribeBadge {
+        message SubscribeBadge {
     Image originImg = 3;
     Image previewImg = 4;
   }
 
 
-  message SubscribeInfo {
+        message SubscribeInfo {
     bool qualification = 1;
     bool isSubscribe = 2;
     SubscribeBadge badge = 3;
@@ -623,7 +623,7 @@ message User {
   }
 
 
-  message UserAttr {
+        message UserAttr {
     bool isMuted = 1;
     bool isAdmin = 2;
     bool isSuperAdmin = 3;
@@ -631,7 +631,7 @@ message User {
   }
 
 
-  message UserStats {
+        message UserStats {
     int64 id = 1;
     string idStr = 2;
     int64 followingCount = 3;
@@ -651,15 +651,15 @@ message User {
 message Emote {
   string emoteId = 1;
   Image image = 2;
-  string uuid = 4;
-}
+  AuditStatus auditStatus = 3;   string uuid = 4;
+  EmoteType emoteType = 5;   ContentSource contentSource = 6;   EmotePrivateType emotePrivateType = 7; }
 
 message PunishEventInfo {
   string punishType = 1;
   string punishReason = 2;
   string punishId = 3;
   int64 violationUid = 4;
-  int64 duration = 6;
+  int32 punishTypeId = 5;   int64 duration = 6;
 }
 
 message MsgFilter {
@@ -678,9 +678,9 @@ message UserIdentity {
 
 message Goal {
   int64 id = 1;
-  string description = 5;
+        string description = 5;
   int32 auditStatus = 6;
-  int64 startTime = 8;
+    int64 startTime = 8;
   int64 expireTime = 9;
   int64 realFinishTime = 10;
   repeated GoalContributor contributorsList = 11;
@@ -711,7 +711,7 @@ message Goal {
 
 message Indicator {
   string key = 1;
-}
+  int64 op = 2; }
 
 
 
@@ -768,7 +768,7 @@ message MemberMessageData {
   string type = 1;
   string label = 2;
   TikTokColor color = 3;
-}
+  repeated MessageDetails details = 4; }
 message LinkMicArmiesItems {
   uint64 hostUserId = 1;
   repeated LinkMicArmiesGroup battleGroups = 2;
@@ -788,7 +788,7 @@ message PollStartContent {
 }
 
 message PollEndContent {
-  repeated PollOptionInfo OptionList = 2;
+  int32 EndType = 1;   repeated PollOptionInfo OptionList = 2;
   User Operator = 3;
 }
 
@@ -840,10 +840,10 @@ message ListUser {
   User user = 1;
   int64 linkmicId = 2;
   string linkmicIdStr = 3;
-  int32 userPosition = 6;
-  int64 modifyTime = 8;
+  int64 linkStatus = 4;   LinkType linkType = 5;   int32 userPosition = 6;
+  int32 silenceStatus = 7;   int64 modifyTime = 8;
   int64 linkerId = 9;
-
+  int32 roleType = 10; 
   enum LinkType {
     LINK_UNKNOWN = 0;
     AUDIO = 1;
@@ -866,7 +866,7 @@ message LinkerCreateContent {
 
 message LinkerEnterContent {
   repeated ListUser linkedUsersList = 1;
-  LinkmicUserSettingInfo anchorSettingInfo = 3;;
+  int32 anchorMultiLiveEnum = 2;   LinkmicUserSettingInfo anchorSettingInfo = 3;;
 }
 
 message LinkerInviteContent {
@@ -883,7 +883,7 @@ message LinkerInviteContent {
 
 message LinkerKickOutContent {
   int64 fromUserId = 1;
-}
+  KickoutReason kickoutReason = 2; }
 
 message LinkerLeaveContent {
   int64 userId = 1;
@@ -906,10 +906,10 @@ message LinkerListChangeContent {
 }
 
 message LinkerMediaChangeContent {
-  int64 toUserId = 2;
+  int64 op = 1;   int64 toUserId = 2;
   int64 anchorId = 3;
   int64 roomId = 4;
-}
+  int64 changeScene = 5; }
 
 message LinkerMicIdxUpdateContent {
 
@@ -918,7 +918,7 @@ message LinkerMicIdxUpdateContent {
 
 message LinkerMuteContent {
   int64 userId = 1;
-}
+  int64 status = 2; }
 
 message LinkerRandomMatchContent {
   User user = 1;
@@ -989,7 +989,7 @@ message LinkerWaitingListChangeContent {
 
 message LinkmicUserSettingInfo {
   int64 userId = 1;
-}
+  int64 layout = 2;   int64 fixMicNum = 3;   int64 allowRequestFromUser = 4;   int64 allowRequestFromFollowerOnly = 5;   LinkmicApplierSortSetting applierSortSetting = 7; }
 
 
 message Player {
@@ -1040,7 +1040,7 @@ message GroupChannelAllUser {
 
 message GroupChannelUser {
   int64 channelId = 1;
-  AllListUser allUser = 4;
+  GroupStatus status = 2;   TextType type = 3;   AllListUser allUser = 4;
   int64 joinTime = 5;
   int64 linkedTime = 6;
   GroupPlayer ownerUser = 7;
@@ -1087,7 +1087,7 @@ message CreateChannelContent {
 }
 
 message ListChangeContent {
-  AllListUser list = 2;
+  TextType type = 1;   AllListUser list = 2;
 }
 
 message MultiLiveContent {
@@ -1099,8 +1099,8 @@ message MultiLiveContent {
 
   message InviteBizContent {
     LinkmicUserSettingInfo anchorSettingInfo = 1;
-    User operatorUserInfo = 3;
-    User inviteeUserInfo = 5;
+    int64 inviteSource = 2;     User operatorUserInfo = 3;
+    int64 operatorLinkAdminType = 4;     User inviteeUserInfo = 5;
   }
 
 
@@ -1114,11 +1114,11 @@ message MultiLiveContent {
     LinkmicUserSettingInfo anchorSettingInfo = 1;
     int64 expireTimestamp = 2;
     User operatorUserInfo = 3;
-  }
+    int64 operatorLinkAdminType = 4;   }
 
   message KickOutBizContent {
     User operatorUserInfo = 1;
-    User kickPlayerUserInfo = 3;
+    int64 operatorLinkAdminType = 2;     User kickPlayerUserInfo = 3;
   }
 
 }
@@ -1147,7 +1147,7 @@ message PermitApplyContent {
   Player  permiter = 1;
   string permiterLinkMicId = 2;
   Position applierPos = 3;
-  DSLConfig dsl = 5;
+  ReplyStatus replyStatus = 4;   DSLConfig dsl = 5;
   User applier = 6;
   User operator = 7;
   string applierLinkMicId = 8;
@@ -1156,7 +1156,7 @@ message PermitApplyContent {
 
 message ReplyInviteContent {
   Player  invitee = 1;
-  string inviteeLinkMicId = 3;
+  ReplyStatus replyStatus = 2;   string inviteeLinkMicId = 3;
   Position inviteePos = 4;
   Player  inviteOperatorUser = 5;
 }
@@ -1164,7 +1164,7 @@ message ReplyInviteContent {
 
 message KickOutContent {
   Player  offliner = 1;
-}
+  KickoutReason kickoutReason = 2; }
 
 
 message CancelApplyContent {
@@ -1209,7 +1209,7 @@ message LeaveJoinGroupContent {
 
 message PermitJoinGroupContent {
   GroupPlayer approver = 1;
-  repeated RTCExtraInfo groupExtInfoList = 4;
+  AgreeStatus agreeStatus = 2;   TextType type = 3;   repeated RTCExtraInfo groupExtInfoList = 4;
   GroupChannelAllUser groupUser = 5;
 }
 
@@ -1217,7 +1217,7 @@ message PermitJoinGroupContent {
 message CancelJoinGroupContent {
   repeated GroupPlayer leaverList = 1;
   GroupPlayer operator = 2;
-}
+  TextType type = 3; }
 
 
 
@@ -1252,7 +1252,7 @@ message BusinessContent {
   }
 
   message PerceptionDialogInfo {
-    Text title = 2;
+    int64 iconType = 1;     Text title = 2;
     Text subTitle = 3;
     Text adviceActionText = 4;
     Text defaultActionText = 5;
@@ -1277,7 +1277,7 @@ message BusinessContent {
     repeated RivalExtra otherUsersList = 3;
 
 
-    message RivalExtra {
+                message RivalExtra {
       int64 userCount = 4;
       Image avatarThumb = 5;
       string displayId = 6;
@@ -1300,7 +1300,7 @@ message BusinessContent {
     int64 id = 1;
     string title = 2;
     Image image = 3;
-  }
+    HashtagNamespace namespace = 4;   }
 
   message TopHostInfo {
     string rankType = 1;
@@ -1311,4 +1311,4 @@ message BusinessContent {
 message JoinGroupContent {
   GroupChannelAllUser groupUser = 1;
   GroupPlayer joinUser = 2;
-}
+  TextType type = 3; }

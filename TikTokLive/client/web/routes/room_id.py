@@ -23,7 +23,10 @@ class RoomIdRoute(WebcastRoute):
             url=self.PATH % (unique_id,)
         )
 
-        return self.parse_room_id(response.text)
+        # Parse & update the web client
+        room_id: str = self.parse_room_id(response.text)
+        self._web.params["room_id"] = room_id
+        return room_id
 
     @classmethod
     def generate_device_id(cls) -> int:

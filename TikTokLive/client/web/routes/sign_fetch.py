@@ -79,8 +79,14 @@ class SignFetchRoute(WebcastRoute):
         elif not response.status_code == 200:
             raise SignAPIError(f"Failed request to Sign API with status code {response.status_code}.")
 
+        webcast_response: WebcastResponse = WebcastResponse().parse(response.read())
+
+        # Update web params & cookies
         self._update_cookies(response)
-        return WebcastResponse().parse(response.read())
+        self._web.params["cursor"] = webcast_response.cursor
+        self._web.params["internal_ext"] = webcast_response.internal_ext
+
+        return webcast_response
 
     def _update_cookies(self, response: Response) -> None:
         """Update the cookies for TikTok"""

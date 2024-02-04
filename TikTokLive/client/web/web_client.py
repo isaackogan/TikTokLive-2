@@ -6,6 +6,10 @@ from TikTokLive.client.web.web_base import WebcastHTTPClient
 
 
 class WebcastWebClient(WebcastHTTPClient):
+    """
+    Wrapper for the HTTP client to add web routes
+
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

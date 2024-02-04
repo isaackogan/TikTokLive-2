@@ -1,37 +1,38 @@
-import asyncio
-import signal
 from abc import ABC, abstractmethod
-from asyncio import AbstractEventLoop
 from typing import Optional, Any, Awaitable
 
-from httpx import Cookies, AsyncClient, Response
+from httpx import Cookies, AsyncClient, Response, Proxy
 
 from TikTokLive.client.web import web_defaults
 
 
 class WebcastHTTPClient:
-    _uuc: int = 0
-    _lib: str = "ttlive-python"
+    __uuc: int = 0
+    __lib: str = "ttlive-python"
 
     def __init__(
             self,
-            loop: AbstractEventLoop,
-            httpx_kwargs: dict = {},
-            sign_api_key: Optional[str] = None
+            proxy: Optional[Proxy] = None,
+            sign_api_key: Optional[str] = None,
+            httpx_kwargs: dict = {}
     ):
-        self._uuc += 1
-        self._httpx: AsyncClient = self._create_httpx_client(sign_api_key, httpx_kwargs)
-        self._loop: AbstractEventLoop = loop
+        self.__uuc += 1
 
-        self._loop.add_signal_handler(
-            signal.SIGTERM,
-            lambda: asyncio.create_task(self.close())
+        self._httpx: AsyncClient = self._create_httpx_client(
+            proxy,
+            sign_api_key,
+            httpx_kwargs
         )
 
     async def close(self):
         await self._httpx.aclose()
 
-    def _create_httpx_client(self, sign_api_key: str, httpx_kwargs: dict) -> AsyncClient:
+    def _create_httpx_client(
+            self,
+            proxy: Optional[Proxy],
+            sign_api_key: str,
+            httpx_kwargs: dict
+    ) -> AsyncClient:
         self.cookies = httpx_kwargs.pop("cookies", Cookies())
         self.headers = {**httpx_kwargs.pop("headers", {}), **web_defaults.DEFAULT_REQUEST_HEADERS}
 
@@ -41,6 +42,7 @@ class WebcastHTTPClient:
         }
 
         return AsyncClient(
+            proxies=proxy,
             cookies=self.cookies,
             params=self.params,
             headers=self.headers,
@@ -54,7 +56,7 @@ class WebcastHTTPClient:
             extra_headers: dict = {},
             **kwargs
     ) -> Response:
-        self.params["uuc"] = self._uuc
+        self.params["uuc"] = self.__uuc
 
         return await self._httpx.get(
             url=url,
@@ -70,8 +72,7 @@ class WebcastHTTPClient:
         # remember to .get("data") when using
 
     def __del__(self):
-        self._uuc = max(0, self._uuc - 1)
-
+        self.__uuc = max(0, self.__uuc - 1)
 
 
 class WebcastRoute(ABC):

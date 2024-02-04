@@ -3,16 +3,11 @@
 # SERIOUSLY!
 # I MEAN IT!
 
-from typing import Dict, Type, Union
-from TikTokLive.proto import *
-from ...events.event import BaseEvent
-from typing import Type, Union
+from typing import Union
 
-class CommentEvent(BaseEvent, WebcastChatMessage):
-    """
-    CommentEvent
-    """
-
+from TikTokLive.events.base import BaseEvent
+from TikTokLive.proto.custom_proto import *
+from TikTokLive.proto.tiktok_proto import *
 
 
 class BarrageEvent(BaseEvent, WebcastBarrageMessage):
@@ -27,6 +22,15 @@ class CaptionEvent(BaseEvent, WebcastCaptionMessage):
     """
 
 
+class CommentEvent(BaseEvent, WebcastChatMessage):
+    """
+    CommentEvent
+    """
+
+    at_user: ExtendedUser
+    user: ExtendedUser
+
+
 class ControlEvent(BaseEvent, WebcastControlMessage):
     """
     ControlEvent
@@ -37,6 +41,8 @@ class EmoteChatEvent(BaseEvent, WebcastEmoteChatMessage):
     """
     EmoteChatEvent
     """
+
+    user: ExtendedUser
 
 
 class EnvelopeEvent(BaseEvent, WebcastEnvelopeMessage):
@@ -49,6 +55,9 @@ class GiftEvent(BaseEvent, WebcastGiftMessage):
     """
     GiftEvent
     """
+
+    user: ExtendedUser
+    to_user: ExtendedUser
 
 
 class GoalUpdateEvent(BaseEvent, WebcastGoalUpdateMessage):
@@ -73,6 +82,8 @@ class LikeEvent(BaseEvent, WebcastLikeMessage):
     """
     LikeEvent
     """
+
+    user: ExtendedUser
 
 
 class LinkEvent(BaseEvent, WebcastLinkMessage):
@@ -116,11 +127,16 @@ class LiveIntroEvent(BaseEvent, WebcastLiveIntroMessage):
     LiveIntroEvent
     """
 
+    host: ExtendedUser
+
 
 class MemberEvent(BaseEvent, WebcastMemberMessage):
     """
     MemberEvent
     """
+
+    operator: ExtendedUser
+    user: ExtendedUser
 
 
 class MessageDetectEvent(BaseEvent, WebcastMsgDetectMessage):
@@ -182,11 +198,15 @@ class SocialEvent(BaseEvent, WebcastSocialMessage):
     SocialEvent
     """
 
+    user: ExtendedUser
+
 
 class SubNotifyEvent(BaseEvent, WebcastSubNotifyMessage):
     """
     SubNotifyEvent
     """
+
+    user: ExtendedUser
 
 
 class SystemEvent(BaseEvent, WebcastSystemMessage):
@@ -304,6 +324,6 @@ __all__ = [
     "SystemEvent",
     "LinkEvent",
     "LinkLayerEvent",
-    "EVENT_MAPPINGS",
-    "ProtoEvent"
+    "ProtoEvent",
+    "EVENT_MAPPINGS"
 ]

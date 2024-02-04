@@ -7,3 +7,4 @@ class BaseEvent:
     @classmethod
     def get_type(cls) -> str:
         return cls.__name__
+

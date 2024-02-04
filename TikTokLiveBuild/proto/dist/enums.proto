@@ -133,12 +133,12 @@ enum LinkmicStatus
 
 enum MemberMessageAction {
   UNKNOWN = 0;
-}
+  JOINED = 1;   SUBSCRIBED = 3;       }
 
 enum ControlAction {
   ControlActionUNKNOWN = 0;
-  STREAM_UNPAUSED = 2;
-}
+  STREAM_PAUSED = 1;   STREAM_UNPAUSED = 2;
+  STREAM_ENDED = 3; }
 
 enum LinkLayerMessageType
 {
