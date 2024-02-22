@@ -1,13 +1,22 @@
 import asyncio
-from typing import Optional, AsyncIterator, List, Dict, Any
+from typing import Optional, AsyncIterator, List, Dict, Any, Callable, Tuple
 
 from httpx import Proxy
-from httpx._types import ProxiesTypes
+from python_socks import parse_proxy_url, ProxyType
 from websockets import WebSocketClientProtocol
+from websockets.legacy.client import Connect
 from websockets_proxy import websockets_proxy
+from websockets_proxy.websockets_proxy import ProxyConnect
 
 from TikTokLive.client.logger import TikTokLiveLogHandler
 from TikTokLive.proto import WebcastPushFrame, WebcastResponse, WebcastResponseMessage
+
+
+class WebcastProxyConnect(ProxyConnect):
+
+    def __init__(self, uri: str, *, proxy: Optional[Proxy], **kwargs):
+        self.logger = kwargs.get("logger", TikTokLiveLogHandler.get_logger())
+        super().__init__(uri, proxy=proxy, **kwargs)
 
 
 class WebcastWSClient:
@@ -28,6 +37,7 @@ class WebcastWSClient:
         self._ws_kwargs: dict = ws_kwargs
         self._ws_cancel: Optional[asyncio.Event] = None
         self._ws: Optional[WebSocketClientProtocol] = None
+        self._ws_proxy: Optional[Proxy] = proxy
         self._logger = TikTokLiveLogHandler.get_logger()
 
     async def send_ack(
@@ -85,16 +95,35 @@ class WebcastWSClient:
 
         """
 
-        return (
+        base_config: dict = (
             {
                 "subprotocols": ["echo-protocol"],
                 "ping_timeout": 10.0,
                 "ping_interval": 10.0,
+                "logger": self._logger,
                 "uri": self._ws_kwargs.pop("uri", uri),
                 "extra_headers": {**headers, **self._ws_kwargs.pop("headers", {})},
                 **self._ws_kwargs
             }
         )
+
+        if self._ws_proxy is not None:
+            base_config["proxy_conn_timeout"] = 10.0
+            base_config["proxy"] = self._convert_proxy()
+
+        return base_config
+
+    def _convert_proxy(self) -> websockets_proxy.Proxy:
+
+        # (proxy_type, host, port, username, password)
+        parsed: Tuple[ProxyType, str, int, Optional[str], Optional[str]] = parse_proxy_url(str(self._ws_proxy.url))
+        parsed: list = list(parsed)
+
+        # Add auth back
+        parsed[3] = self._ws_proxy.auth[0]
+        parsed[4] = self._ws_proxy.auth[1]
+
+        return websockets_proxy.Proxy(*parsed)
 
     async def connect(
             self,
@@ -140,8 +169,10 @@ class WebcastWSClient:
 
         """
 
+        connect: Callable = WebcastProxyConnect if self._ws_proxy else Connect
+
         # Run connection loop
-        async for websocket in websockets_proxy.connect(**self.build_connection_args(uri, headers)):
+        async for websocket in connect(**self.build_connection_args(uri, headers)):
 
             # Update the stored websocket
             self._ws = websocket

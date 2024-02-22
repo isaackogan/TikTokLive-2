@@ -5,9 +5,32 @@
 
 from typing import Union
 
-from TikTokLive.events.base import BaseEvent
 from TikTokLive.proto.custom_proto import *
 from TikTokLive.proto.tiktok_proto import *
+from .base import BaseEvent
+
+
+class GiftEvent(BaseEvent, WebcastGiftMessage):
+    """
+    GiftEvent
+    """
+
+    to_user: ExtendedUser
+    user: ExtendedUser
+    gift: ExtendedGiftStruct
+
+    @property
+    def streaking(self) -> bool:
+        if not self.streakable:
+            return False
+
+        return not bool(self.repeat_end)
+
+
+class RoomEvent(BaseEvent, WebcastRoomMessage):
+    """
+    RoomEvent
+    """
 
 
 class BarrageEvent(BaseEvent, WebcastBarrageMessage):
@@ -30,6 +53,10 @@ class CommentEvent(BaseEvent, WebcastChatMessage):
     at_user: ExtendedUser
     user: ExtendedUser
 
+    @property
+    def comment(self) -> str:
+        return self.content
+
 
 class ControlEvent(BaseEvent, WebcastControlMessage):
     """
@@ -51,24 +78,9 @@ class EnvelopeEvent(BaseEvent, WebcastEnvelopeMessage):
     """
 
 
-class GiftEvent(BaseEvent, WebcastGiftMessage):
-    """
-    GiftEvent
-    """
-
-    user: ExtendedUser
-    to_user: ExtendedUser
-
-
 class GoalUpdateEvent(BaseEvent, WebcastGoalUpdateMessage):
     """
     GoalUpdateEvent
-    """
-
-
-class HourlyRankEvent(BaseEvent, WebcastHourlyRankMessage):
-    """
-    HourlyRankEvent
     """
 
 
@@ -86,15 +98,64 @@ class LikeEvent(BaseEvent, WebcastLikeMessage):
     user: ExtendedUser
 
 
-class LinkEvent(BaseEvent, WebcastLinkMessage):
+class RoomUserSeqEvent(BaseEvent, WebcastRoomUserSeqMessage):
     """
-    LinkEvent
+    RoomUserSeqEvent
     """
 
 
-class LinkLayerEvent(BaseEvent, WebcastLinkLayerMessage):
+class SocialEvent(BaseEvent, WebcastSocialMessage):
     """
-    LinkLayerEvent
+    SocialEvent
+    """
+
+    user: ExtendedUser
+
+
+class SubNotifyEvent(BaseEvent, WebcastSubNotifyMessage):
+    """
+    SubNotifyEvent
+    """
+
+    user: ExtendedUser
+
+
+class RankUpdateEvent(BaseEvent, WebcastRankUpdateMessage):
+    """
+    RankUpdateEvent
+    """
+
+
+class MemberEvent(BaseEvent, WebcastMemberMessage):
+    """
+    MemberEvent
+    """
+
+    operator: ExtendedUser
+    user: ExtendedUser
+
+
+class PollEvent(BaseEvent, WebcastPollMessage):
+    """
+    PollEvent
+    """
+
+
+class QuestionNewEvent(BaseEvent, WebcastQuestionNewMessage):
+    """
+    QuestionNewEvent
+    """
+
+
+class RankTextEvent(BaseEvent, WebcastRankTextMessage):
+    """
+    RankTextEvent
+    """
+
+
+class HourlyRankEvent(BaseEvent, WebcastHourlyRankMessage):
+    """
+    HourlyRankEvent
     """
 
 
@@ -130,13 +191,10 @@ class LiveIntroEvent(BaseEvent, WebcastLiveIntroMessage):
     host: ExtendedUser
 
 
-class MemberEvent(BaseEvent, WebcastMemberMessage):
+class UnauthorizedMemberEvent(BaseEvent, WebcastUnauthorizedMemberMessage):
     """
-    MemberEvent
+    UnauthorizedMemberEvent
     """
-
-    operator: ExtendedUser
-    user: ExtendedUser
 
 
 class MessageDetectEvent(BaseEvent, WebcastMsgDetectMessage):
@@ -151,62 +209,10 @@ class OecLiveShoppingEvent(BaseEvent, WebcastOecLiveShoppingMessage):
     """
 
 
-class PollEvent(BaseEvent, WebcastPollMessage):
-    """
-    PollEvent
-    """
-
-
-class QuestionNewEvent(BaseEvent, WebcastQuestionNewMessage):
-    """
-    QuestionNewEvent
-    """
-
-
-class RankTextEvent(BaseEvent, WebcastRankTextMessage):
-    """
-    RankTextEvent
-    """
-
-
-class RankUpdateEvent(BaseEvent, WebcastRankUpdateMessage):
-    """
-    RankUpdateEvent
-    """
-
-
-class RoomEvent(BaseEvent, WebcastRoomMessage):
-    """
-    RoomEvent
-    """
-
-
 class RoomPinEvent(BaseEvent, WebcastRoomPinMessage):
     """
     RoomPinEvent
     """
-
-
-class RoomUserSeqEvent(BaseEvent, WebcastRoomUserSeqMessage):
-    """
-    RoomUserSeqEvent
-    """
-
-
-class SocialEvent(BaseEvent, WebcastSocialMessage):
-    """
-    SocialEvent
-    """
-
-    user: ExtendedUser
-
-
-class SubNotifyEvent(BaseEvent, WebcastSubNotifyMessage):
-    """
-    SubNotifyEvent
-    """
-
-    user: ExtendedUser
 
 
 class SystemEvent(BaseEvent, WebcastSystemMessage):
@@ -215,9 +221,15 @@ class SystemEvent(BaseEvent, WebcastSystemMessage):
     """
 
 
-class UnauthorizedMemberEvent(BaseEvent, WebcastUnauthorizedMemberMessage):
+class LinkEvent(BaseEvent, WebcastLinkMessage):
     """
-    UnauthorizedMemberEvent
+    LinkEvent
+    """
+
+
+class LinkLayerEvent(BaseEvent, WebcastLinkLayerMessage):
+    """
+    LinkLayerEvent
     """
 
 

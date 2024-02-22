@@ -5,7 +5,7 @@ from httpx import Response
 
 from TikTokLive.client.errors import UserOfflineError
 from TikTokLive.client.web.web_base import WebcastRoute
-from TikTokLive.client.web.web_defaults import TIKTOK_URL_WEB
+from TikTokLive.client.web.web_settings import WebDefaults
 
 
 class FailedParseRoomIdError(RuntimeError):
@@ -15,7 +15,7 @@ class FailedParseRoomIdError(RuntimeError):
 class RoomIdRoute(WebcastRoute):
     """Retrieve the room ID"""
 
-    PATH: str = TIKTOK_URL_WEB + "/@%s/live"
+    PATH: str = WebDefaults.tiktok_app_url + "/@%s/live"
 
     async def __call__(self, unique_id: str) -> str:
 

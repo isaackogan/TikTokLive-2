@@ -46,7 +46,7 @@ class TikTokLiveLogHandler(logging.StreamHandler):
     @classmethod
     def get_logger(
             cls,
-            level: LogLevel = LogLevel.WARNING,
+            level: Optional[LogLevel] = None,
             stream: Optional[Any] = None
     ) -> logging.Logger:
         """
@@ -58,12 +58,15 @@ class TikTokLiveLogHandler(logging.StreamHandler):
 
         """
 
+        if cls.LOGGER and not level:
+            return cls.LOGGER
+
         if not cls.LOGGER:
             log_handler: TikTokLiveLogHandler = TikTokLiveLogHandler(stream)
             cls.LOGGER = logging.getLogger(cls.LOGGER_NAME)
             cls.LOGGER.addHandler(log_handler)
 
-        cls.LOGGER.setLevel(level.value)
+        cls.LOGGER.setLevel((level if level is not None else LogLevel.WARNING).value)
         return cls.LOGGER
 
     @classmethod
@@ -80,12 +83,14 @@ class TikTokLiveLogHandler(logging.StreamHandler):
 
         for idx, part in enumerate(path_parts):
 
+            if not part:
+                continue
+
             if idx + 1 == len(path_parts):
                 finished_parts.append(part)
                 break
 
             finished_parts.append(part[0])
-
         return ".".join(finished_parts)
 
     def emit(self, record: logging.LogRecord) -> None:

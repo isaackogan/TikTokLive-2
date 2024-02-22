@@ -1,10 +1,11 @@
-import os
 from http.cookies import SimpleCookie
+from typing import Optional
 
+import httpx
 from httpx import Response
 
-from TikTokLive.client.web import web_defaults
 from TikTokLive.client.web.web_base import WebcastRoute
+from TikTokLive.client.web.web_settings import WebDefaults
 from TikTokLive.proto import WebcastResponse
 
 
@@ -34,6 +35,7 @@ class SignatureRateLimitError(SignAPIError):
 
         _args = list(args)
         _args[0] = str(args[0]) % str(self.retry_after)
+
         super().__init__(self, *_args)
 
     @property
@@ -57,11 +59,20 @@ class SignatureRateLimitError(SignAPIError):
 
 class SignFetchRoute(WebcastRoute):
 
-    ENV_PATH: str = f"TIKTOKLIVE_SIGN_API_URL"
-    PATH: str = os.environ.get(ENV_PATH, web_defaults.TIKTOK_SIGN_API) + "/webcast/fetch/"
-
     async def __call__(self) -> WebcastResponse:
-        response: Response = await self._web.get_response(url=self.PATH)
+        try:
+            response: Response = await self._web.get_response(
+                url=WebDefaults.tiktok_sign_url + "/webcast/fetch/",
+                extra_params={'client': self._lib}
+            )
+        except httpx.ConnectError as ex:
+            raise SignAPIError(
+                "Failed to connect to the sign server due to an httpx.ConnectError!"
+            ) from ex
+
+        if response.is_redirect:
+            response: Response = await self._web.get_response(url=str(response.url))
+
         data: bytes = await response.aread()
 
         if response.status_code == 429:
@@ -92,7 +103,12 @@ class SignFetchRoute(WebcastRoute):
         """Update the cookies for TikTok"""
 
         jar: SimpleCookie = SimpleCookie()
-        jar.load(response.headers.get("X-Set-TT-Cookie"))
+        cookies_header: Optional[str] = response.headers.get("X-Set-TT-Cookie")
+
+        if not cookies_header:
+            raise SignAPIError("Sign server did not return cookies!")
+
+        jar.load(cookies_header)
 
         for cookie, morsel in jar.items():
             self._web.cookies.set(cookie, morsel.value, ".tiktok.com")

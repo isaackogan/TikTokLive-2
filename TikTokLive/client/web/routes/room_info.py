@@ -3,7 +3,7 @@ from typing import Any, Dict, Optional
 from httpx import Response
 
 from TikTokLive.client.web.web_base import WebcastRoute
-from TikTokLive.client.web.web_defaults import TIKTOK_URL_WEBCAST
+from TikTokLive.client.web.web_settings import WebDefaults
 
 
 class FailedFetchRoomInfoError(RuntimeError):
@@ -13,7 +13,7 @@ class FailedFetchRoomInfoError(RuntimeError):
 class RoomInfoRoute(WebcastRoute):
     """Retrieve the room ID"""
 
-    PATH: str = TIKTOK_URL_WEBCAST + "/room/info/"
+    PATH: str = WebDefaults.tiktok_webcast_url + "/room/info/"
 
     async def __call__(self, room_id: Optional[str] = None) -> Dict[str, Any]:
 

@@ -1,6 +1,5 @@
-
-"""Default HTTP client parameters to include in requests to the Webcast API & Websocket Server"""
-from typing import Dict, Union
+from dataclasses import dataclass, field
+from typing import Dict, Union, Any, Optional
 
 DEFAULT_CLIENT_PARAMS: Dict[str, Union[int, bool, str]] = {
     "aid": 1988,
@@ -48,11 +47,21 @@ DEFAULT_REQUEST_HEADERS: Dict[str, str] = {
     'Accept-Encoding': 'gzip, deflate',
 }
 
-"""The URL of the TikTok Webapp"""
-TIKTOK_URL_WEB: str = 'https://www.tiktok.com'
 
-"""The URL of the Webcast API"""
-TIKTOK_URL_WEBCAST: str = 'https://webcast.tiktok.com/webcast'
+@dataclass()
+class _WebDefaults:
+    tiktok_app_url: str = "https://www.tiktok.com"
+    tiktok_sign_url: str = "https://tiktok.eulerstream.com"
+    tiktok_webcast_url: str = 'https://webcast.tiktok.com/webcast'
 
-"""The URL of the Webcast External Signing API"""
-TIKTOK_SIGN_API: str = "https://tiktok.eulerstream.com"
+    client_params: Dict[str, Any] = field(default_factory=lambda: DEFAULT_CLIENT_PARAMS)
+    client_headers: Dict[str, Any] = field(default_factory=lambda: DEFAULT_REQUEST_HEADERS)
+
+    tiktok_sign_api_key: Optional[str] = None
+
+
+WebDefaults: _WebDefaults = _WebDefaults()
+
+__all__ = [
+    "WebDefaults"
+]

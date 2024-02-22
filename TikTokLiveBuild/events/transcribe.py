@@ -6,6 +6,7 @@ from typing import List, get_type_hints, Dict, Optional, Type, Tuple, Generator
 import betterproto
 import jinja2
 
+from TikTokLive.client.logger import TikTokLiveLogHandler, LogLevel
 from TikTokLive.proto.tiktok_proto import Common
 
 MESSAGE_OVERRIDES: Dict[str, str] = {
@@ -14,7 +15,6 @@ MESSAGE_OVERRIDES: Dict[str, str] = {
 }
 
 BASE_IMPORTS: List[str] = [
-    "from dataclasses import dataclass",
     "from TikTokLive.proto.tiktok_proto import *",
     "from TikTokLive.proto.custom_proto import *",
     "from .base import BaseEvent",
@@ -56,6 +56,7 @@ class EventsTranscriber:
         template_dir: str,
         template_name: str,
         output_path: str,
+        merge_import: str,
         merge_path: str
     ):
 
@@ -67,7 +68,8 @@ class EventsTranscriber:
 
         self._template: jinja2.Template = self._env.get_template(template_name)
         self._output_path: str = output_path
-        self._proto_mod: PreviousMod = PreviousMod(merge_path)
+        self._proto_mod: PreviousMod = PreviousMod(merge_import, merge_path)
+        self._import_name: str = merge_import
 
     def __call__(self, *args, **kwargs):
 
@@ -75,6 +77,9 @@ class EventsTranscriber:
 
         with open(self._output_path, "w", encoding="utf-8") as file:
             file.write(output)
+
+        # Reload the file for other scripts
+        importlib.reload(importlib.import_module(self._import_name))
 
     def generate_events(self) -> Generator[dict, None, None]:
         from TikTokLive.proto import tiktok_proto
@@ -102,9 +107,11 @@ class EventsTranscriber:
         all_events: List[str] = [e["class_name"] for e in events]
         unregistered_classes: List[str] = [t[0] for t in existing_classes if t[0] not in all_events]
 
-        print(f"Merged {len(existing_classes)} Previous:", ", ".join([e[0] for e in existing_classes]))
-        print(f"Added {len(new_events)} New Events:", ", ".join(new_events) or "N/A")
-        print(f"Logged {len(unregistered_classes)} Unregistered Classes:", ", ".join(unregistered_classes) or "N/A")
+        logger = TikTokLiveLogHandler.get_logger(level=LogLevel.INFO)
+
+        logger.info(f"Merged {len(existing_classes)} Previous: " + (", ".join([e[0] for e in existing_classes] or "N/A")))
+        logger.info(f"Added {len(new_events)} New Events: " + (", ".join(new_events) or "N/A"))
+        logger.info(f"Logged {len(unregistered_classes)} Unregistered Classes: " + (", ".join(unregistered_classes) or "N/A"))
 
     def build_config(self) -> dict:
 
@@ -134,9 +141,16 @@ class EventsTranscriber:
 
 class PreviousMod:
 
-    def __init__(self, name: str):
-        self._input: ModuleType = importlib.import_module(name=name)
-        self._src: str = inspect.getsource(self._input)
+    def __init__(self, name: str, path: str):
+        try:
+            self._input: ModuleType = importlib.import_module(name=name)
+        except ModuleNotFoundError:
+            open(path, mode="w", encoding="utf-8").write("")
+            self._input: ModuleType = importlib.import_module(name=name)
+        try:
+            self._src: str = inspect.getsource(self._input)
+        except OSError:
+            self._src: str = ""
 
     def get_class_text(self, class_name: str) -> Optional[str]:
         c: Optional[Type] = getattr(self._input, class_name, None)

@@ -130,7 +130,7 @@ message WebcastBarrageMessage {
     string eventName = 1;
   }
 
-      enum BarrageType {
+  enum BarrageType {
     UNKNOWN = 0;
     ECOMORDERING = 1;
     ECOMBUYING = 2;

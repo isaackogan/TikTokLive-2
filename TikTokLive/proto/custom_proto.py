@@ -4,7 +4,7 @@ from typing import Type, TypeVar
 
 import betterproto
 
-from TikTokLive.proto import User
+from TikTokLive.proto import User, GiftStruct
 
 MessageType: Type = TypeVar('MessageType', bound=betterproto.Message)
 
@@ -38,3 +38,12 @@ class ExtendedUser(User):
     @property
     def unique_id(self) -> str:
         return self.display_id
+
+
+@proto_extension
+class ExtendedGiftStruct(GiftStruct):
+
+    @property
+    def streakable(self) -> bool:
+        return self.type == 1
+
